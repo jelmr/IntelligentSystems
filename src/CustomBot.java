@@ -35,7 +35,7 @@ public class CustomBot {
 
 		try {
 			// This block configure the logger with handler and formatter
-			fh = new FileHandler("/Users/jelmer/testLog.txt");
+			fh = new FileHandler("logs/log-"+String.valueOf(System.currentTimeMillis())+".txt");
 			logger.addHandler(fh);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fh.setFormatter(formatter);
@@ -48,8 +48,6 @@ public class CustomBot {
 		}
 	}
 
-
-	private static int field;
 
 
 	/*

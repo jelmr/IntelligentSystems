@@ -8,6 +8,7 @@ MODE=$4
 NTURN=$5
 MAXT=$6
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-java -jar tools/PlayGame.jar tools/maps/$MAP  "java $PLAYER1 " "java $PLAYER2 " $MODE $NTURN $MAXT   | python tools/visualizer/visualize_locally.py 
 
+java -jar $DIR/PlayGame.jar $DIR/maps/$MAP  "java $PLAYER1 " "java $PLAYER2 " $MODE $NTURN $MAXT

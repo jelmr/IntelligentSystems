@@ -4,4 +4,7 @@
 *.class
 bin
 log
-log.txt
+src/log.txt
+logs
+logs/*
+.DS_Store
