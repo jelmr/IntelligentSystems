@@ -16,16 +16,17 @@ import java.util.logging.SimpleFormatter;
  f`*/
 public class CustomBot {
 
+
 	public static final int 	NEUTRAL = 1,
 								FRIENDLY = 1,
 								ENEMY = 2;
 
-	public static final double 	ENEMY_RELATIVE_IMPORTANCE = 2, // tweak with neural network?
+	public static final double 	ENEMY_RELATIVE_IMPORTANCE = 2.5, // tweak with neural network?
 								FRIEND_RELATIVE_IMPORTANCE = 0.5,
 								NEUTRAL_RELATIVE_IMPORTANCE = 1;
-	public static final int BLA = 1;
 
 	private static Logger logger;
+
 
 
 	static {
@@ -85,18 +86,7 @@ public class CustomBot {
 			}
 			return highestScorePlanet;
 		}
-
-		add();
-
 		return null;
-	}
-
-
-	private static void add() {
-		int a = BLA;
-		field = 2;
-		int b = field;
-		int c = a + b;
 	}
 
 
