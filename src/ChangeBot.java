@@ -1,5 +1,5 @@
 /**
- *  A bot that sends ships from his biggest planet (by shipcount) to an hostile planet with the most favorable GrowthRate / ships lost ratio.
+ * Currently a copy of CustomBot. Should be changed later.
  *
  * @author Jelmer Mulder
  * @author Sebastian Österlund
@@ -7,8 +7,7 @@
  * Date: 11/01/2014
  */
 
-public class AggresiveBot extends Bot{
-
+public class ChangeBot extends Bot{
 
 	@Override
 	public Planet getSourcePlanet(PlanetWars pw) {
@@ -17,12 +16,12 @@ public class AggresiveBot extends Bot{
 
 	@Override
 	public Planet getTargetPlanet(PlanetWars pw) {
-		return select(pw.EnemyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		return select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
 	}
 
 
 	public static void main(String[] args) {
-		Bot bot = new AggresiveBot();
+		Bot bot = new ChangeBot();
 		Bot.execute(bot);
 	}
 

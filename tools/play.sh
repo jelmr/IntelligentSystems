@@ -10,5 +10,10 @@ MAXT=$6
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+javac *.java
 
-java -jar $DIR/PlayGame.jar $DIR/maps/$MAP  "java $PLAYER1 " "java $PLAYER2 " $MODE $NTURN $MAXT   | python $DIR/visualizer/visualize_locally.py
+echo "Player 1: "$2 "(red)"
+echo "Player 2: "$3 "(blue)"
+
+
+java -jar $DIR/PlayGame.jar $DIR/maps/8planets/map1.txt  "java $PLAYER1 " "java RandomBot" $MODE $NTURN $MAXT   | python $DIR/visualizer/visualize_locally.py

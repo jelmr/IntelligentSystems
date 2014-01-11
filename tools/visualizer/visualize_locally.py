@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-This module lets you run a command like:
+This module lets you execute a command like:
 
     java -jar tools/PlayGame.jar map.txt 100 100 log "./bot1" "./bot2" | \
     python visualizer/visualize_localy.py
