@@ -36,6 +36,7 @@ public abstract class Bot {
 	 */
 	public abstract Planet getTargetPlanet(PlanetWars pw);
 
+
 	public static void DoTurn(PlanetWars pw, Bot bot) {
 		Planet source = bot.getSourcePlanet(pw);
 		Planet target = bot.getTargetPlanet(pw);
@@ -45,7 +46,6 @@ public abstract class Bot {
 		}
 
 	}
-
 
 	/**
 	 * Used to interact with the Engine.

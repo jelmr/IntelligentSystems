@@ -118,7 +118,7 @@ public abstract class Heuristic {
 			} else if (planet.Owner() == FRIENDLY) {
 				return baseScore * 0.5;
 			} else { // if neutral
-				return baseScore * (double) 1;
+				return baseScore;
 			}
 
 		}

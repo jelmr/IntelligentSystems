@@ -14,7 +14,18 @@ public class Planet implements Cloneable {
 	this.y = y;
     }
 
-    // Accessors and simple modification functions. These should be mostly
+
+	@Override
+	public String toString() {
+		return "Planet{" +
+				"owner=" + owner +
+				", numShips=" + numShips +
+				", growthRate=" + growthRate +
+				'}';
+	}
+
+
+	// Accessors and simple modification functions. These should be mostly
     // self-explanatory.
     public int PlanetID() {
 	return planetID;

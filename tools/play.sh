@@ -16,4 +16,4 @@ echo "Player 1: "$2 "(red)"
 echo "Player 2: "$3 "(blue)"
 
 
-java -jar $DIR/PlayGame.jar $DIR/maps/8planets/map1.txt  "java $PLAYER1 " "java RandomBot" $MODE $NTURN $MAXT   | python $DIR/visualizer/visualize_locally.py
+java -jar $DIR/PlayGame.jar $DIR/maps/8planets/map1.txt  "java $PLAYER1 " "java BullyBot" $MODE $NTURN $MAXT   | python $DIR/visualizer/visualize_locally.py
