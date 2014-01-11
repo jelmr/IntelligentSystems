@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -18,11 +17,7 @@ import java.util.logging.SimpleFormatter;
 
 public abstract class Bot {
 
-	Logger logger;
-
-	Bot(){
-		logger = getLogger();
-	}
+	static Logger logger;
 
 
 	/**
@@ -58,6 +53,7 @@ public abstract class Bot {
 	 * @param bot The bot to use to make decisions.
 	 */
 	public static void execute(Bot bot) {
+		logger = getLogger(bot);
 		String line = "";
 		String message = "";
 		int c;
@@ -95,14 +91,14 @@ public abstract class Bot {
 	 *
 	 * @return the logger.
 	 */
-	public static Logger getLogger(){
+	public static Logger getLogger(Bot bot){
 
 		Logger logger = Logger.getLogger("MyLog");
 		FileHandler fh;
 
 		try {
 			// This block configure the logger with handler and formatter
-			fh = new FileHandler(System.getProperty("user.dir")+"/../logs/log-" + String.valueOf(System.currentTimeMillis()) + ".txt");
+			fh = new FileHandler(System.getProperty("user.dir")+"/../logs/"+ bot.getClass().getSimpleName()+"-" + String.valueOf(System.currentTimeMillis()) + ".txt");
 			logger.addHandler(fh);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fh.setFormatter(formatter);

@@ -9,6 +9,8 @@
 
 public class ChangeBot extends Bot{
 
+
+
 	@Override
 	public Planet getSourcePlanet(PlanetWars pw) {
 		return Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);

@@ -58,7 +58,7 @@ public abstract class Heuristic {
 
 	static class Random extends Heuristic {
 
-		// Beter done by selecting a random number in the getPlanet() method...
+		// Better done by selecting a random number in the getPlanet() method...
 		@Override
 		public double calculateScore(Planet planet) {
 			return Math.random();
