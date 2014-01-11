@@ -1,0 +1,12 @@
+.classpath
+.project
+.pydevproject
+*.class
+bin
+log
+src/log.txt
+logs
+logs/*
+.DS_Store
+.idea/
+log.txt
