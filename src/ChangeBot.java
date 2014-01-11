@@ -11,12 +11,12 @@ public class ChangeBot extends Bot{
 
 	@Override
 	public Planet getSourcePlanet(PlanetWars pw) {
-		return select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+		return Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
 	}
 
 	@Override
 	public Planet getTargetPlanet(PlanetWars pw) {
-		return select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		return Heuristic.select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
 	}
 
 

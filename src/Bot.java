@@ -53,28 +53,6 @@ public abstract class Bot {
 
 
 	/**
-	 * Selects the planet from the supplied list with the highest score using the supplied heuristic.
-	 *
-	 * @param planets The list from which to pick a planet.
-	 * @param heuristic The heuristic to use to pick a planet.
-	 * @return The best planet from the list based on the supplied heuristic.
-	 */
-	public static Planet select(List<Planet> planets, Heuristic heuristic) {
-		Planet maxPlanet = planets.get(0);
-		double maxScore = -Double.MAX_VALUE;
-
-		for (Planet planet : planets) {
-			double score = heuristic.calculateScore(planet);
-			if (score > maxScore) {
-				maxPlanet = planet;
-				maxScore = score;
-			}
-		}
-		return maxPlanet;
-	}
-
-
-	/**
 	 * Used to interact with the Engine.
 	 *
 	 * @param bot The bot to use to make decisions.
@@ -124,7 +102,7 @@ public abstract class Bot {
 
 		try {
 			// This block configure the logger with handler and formatter
-			fh = new FileHandler(System.getProperty("user.dir")+"/logs/log-" + String.valueOf(System.currentTimeMillis()) + ".txt");
+			fh = new FileHandler(System.getProperty("user.dir")+"/../logs/log-" + String.valueOf(System.currentTimeMillis()) + ".txt");
 			logger.addHandler(fh);
 			SimpleFormatter formatter = new SimpleFormatter();
 			fh.setFormatter(formatter);

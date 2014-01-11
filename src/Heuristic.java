@@ -1,3 +1,6 @@
+import java.util.List;
+
+
 /**
  * Interface for heuristics. An heuristic attaches a performance-score to a planet.
  *
@@ -7,18 +10,41 @@
  * Date: 11/01/2014
  */
 
-public interface Heuristic {
+public abstract class Heuristic {
 
-	Heuristic 	RANDOM = new Random(),
-				FEWEST_SHIPS = new FewestShips(),
-				MOST_SHIPS = new MostShips(),
-				SMALLEST_GENERATION = new SmallestGeneration(),
-				LARGEST_GENERATION = new LargestGeneration(),
-				BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost();
+	public static final Heuristic 	RANDOM = new Random(),
+									FEWEST_SHIPS = new FewestShips(),
+									MOST_SHIPS = new MostShips(),
+									SMALLEST_GENERATION = new SmallestGeneration(),
+									LARGEST_GENERATION = new LargestGeneration(),
+									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost();
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
 							ENEMY = 2;
+
+
+	/**
+	 * Selects the planet from the supplied list with the highest score using the supplied heuristic.
+	 *
+	 * @param planets The list from which to pick a planet.
+	 * @param heuristic The heuristic to use to pick a planet.
+	 * @return The best planet from the list based on the supplied heuristic.
+	 */
+	public static Planet select(List<Planet> planets, Heuristic heuristic) {
+		Planet maxPlanet = planets.get(0);
+		double maxScore = -Double.MAX_VALUE;
+
+		for (Planet planet : planets) {
+			double score = heuristic.calculateScore(planet);
+			if (score > maxScore) {
+				maxPlanet = planet;
+				maxScore = score;
+			}
+		}
+		return maxPlanet;
+	}
+
 
 	/**
 	 * Calculate a score for a planet. A higher score means it is favorable to take over this planet.
@@ -26,11 +52,11 @@ public interface Heuristic {
 	 * @param planet The planet for which to calculate a score.
 	 * @return A score. A higher score means it is favorable to take over this planet.
 	 */
-	double calculateScore(Planet planet);
+	abstract double calculateScore(Planet planet);
 
 
 
-	class Random implements Heuristic {
+	static class Random extends Heuristic {
 
 		// Beter done by selecting a random number in the getPlanet() method...
 		@Override
@@ -41,7 +67,7 @@ public interface Heuristic {
 
 
 
-	class FewestShips implements Heuristic {
+	static class FewestShips extends Heuristic {
 
 		@Override
 		public double calculateScore(Planet planet) {
@@ -51,7 +77,7 @@ public interface Heuristic {
 
 
 
-	class MostShips implements Heuristic {
+	static class MostShips extends Heuristic {
 
 		@Override
 		public double calculateScore(Planet planet) {
@@ -61,7 +87,7 @@ public interface Heuristic {
 
 
 
-	class SmallestGeneration implements Heuristic {
+	static class SmallestGeneration extends Heuristic {
 
 		@Override
 		public double calculateScore(Planet planet) {
@@ -71,7 +97,7 @@ public interface Heuristic {
 
 
 
-	class LargestGeneration implements Heuristic {
+	static class LargestGeneration extends Heuristic {
 
 		@Override
 		public double calculateScore(Planet planet) {
@@ -81,7 +107,7 @@ public interface Heuristic {
 
 
 
-	class BestGenerationPerShipsLost implements Heuristic {
+	static class BestGenerationPerShipsLost extends Heuristic {
 
 		@Override
 		public double calculateScore(Planet planet) {
