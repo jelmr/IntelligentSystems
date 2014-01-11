@@ -12,12 +12,12 @@ public class BullyBot extends Bot{
 
 	@Override
 	public Planet getSourcePlanet(PlanetWars pw) {
-		return select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+		return Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
 	}
 
 	@Override
 	public Planet getTargetPlanet(PlanetWars pw) {
-		return select(pw.NotMyPlanets(), Heuristic.FEWEST_SHIPS);
+		return Heuristic.select(pw.NotMyPlanets(), Heuristic.FEWEST_SHIPS);
 	}
 
 

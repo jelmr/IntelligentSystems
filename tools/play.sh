@@ -10,7 +10,7 @@ MAXT=$6
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-javac *.java
+javac -encoding ISO-8859-1 *.java
 
 echo "Player 1: "$2 "(red)"
 echo "Player 2: "$3 "(blue)"

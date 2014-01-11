@@ -12,12 +12,12 @@ public class AggresiveBot extends Bot{
 
 	@Override
 	public Planet getSourcePlanet(PlanetWars pw) {
-		return select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+		return Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
 	}
 
 	@Override
 	public Planet getTargetPlanet(PlanetWars pw) {
-		return select(pw.EnemyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		return Heuristic.select(pw.EnemyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
 	}
 
 
