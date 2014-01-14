@@ -13,7 +13,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 	List<Planet> planets = new ArrayList<Planet>();
 
-	private int player;
+	public int player;
 
 
 	public SimulatedPlanetWars(PlanetWars pw) {

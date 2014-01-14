@@ -4,7 +4,7 @@
 
 MAP=$1 
 PLAYER1=$2
-PLAYER2="BullyBot"
+PLAYER2=$3
 MODE=$4
 NTURN=$5
 MAXT=$6

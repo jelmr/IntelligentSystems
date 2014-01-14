@@ -17,7 +17,7 @@ public abstract class Search {
 
 	static class MinMax extends Search {
 
-		public static final int MAX_DEPTH = 5;
+		public static final int MAX_DEPTH = 4;
 
 
 		@Override
@@ -30,7 +30,7 @@ public abstract class Search {
 
 				if (source.NumShips() <= 1) {continue;}
 
-				for (Planet target : pw.NotMyPlanets()) {
+				for (Planet target : pw.Planets()) {
 					SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, Bot.FRIENDLY);
 					spw.IssueOrder(source, target);
 
@@ -52,6 +52,7 @@ public abstract class Search {
 
 		private double findBestScore(SimulatedPlanetWars pw, PerformanceMeasure pm, int depth) {
 			int winner = pw.Winner();
+            
 			if (winner != -1) {
 				return winner == Bot.FRIENDLY ? 1 : 0;
 			}
@@ -63,20 +64,27 @@ public abstract class Search {
 
 			for (Planet source : pw.MyPlanets()) {
 
+
 				if (source.NumShips() <= 1) {continue;}
 
-				for (Planet target : pw.NotMyPlanets()) {
+				for (Planet target : pw.Planets()) {
 
 					pw.IssueOrder(source, target);
 
 					SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, pw.notPlayer());
 					double score = findBestScore(spw, pm, depth + 1);
 
-					if (score > maxScore) {
+                    if (depth % 2 != 0 && score > maxScore) {
+                        // Friendly chooses maximal score
+						maxScore = score;
+
+                    } else if (depth % 2 == 0 && score < maxScore) {
+                        // Enemy chooses minimal score
 						maxScore = score;
 					}
 				}
-			}
+            }
+			
 
 			return maxScore;
 		}

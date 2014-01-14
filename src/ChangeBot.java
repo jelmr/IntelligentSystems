@@ -11,7 +11,7 @@ public class ChangeBot extends Bot{
 
 	@Override
 	public Action getAction(PlanetWars pw) {
-		return Search.MIN_MAX.findBest(pw, PerformanceMeasure.MOST_SHIPS);
+		return Search.MIN_MAX.findBest(pw, PerformanceMeasure.MOST_PLANETS);
 	}
 
 
