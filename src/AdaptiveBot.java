@@ -7,7 +7,7 @@ import java.util.*;
  * number of ships, etc.). Knowing which strategy to use has to be collected beforehand.
  * This requires running a number of games of your bots, and evaluate which bot performs best for a certain environment.
  * You should then add this to the data structure (in AdaptivityMap.java). 
- * The DoTurn method can then query this data structure to know what strategy should be used for this turn. 
+ * The getAction method can then query this data structure to know what strategy should be used for this turn.
  * This example provides two environment variables: the number of neutral planets on the map, and the average growth
  * ratio of these neutral planets.
  * 

@@ -17,41 +17,38 @@ import java.util.logging.SimpleFormatter;
 
 public abstract class Bot {
 
+	public static final int NEUTRAL = 0,
+							FRIENDLY = 1,
+							HOSTILE = 2;
+
 	static Logger logger;
 
 
 	/**
 	 * Function for selecting the planet from which to send ships.
 	 *
+	 *
 	 * @param pw PlanetWars object from which to derive game state.
 	 * @return The planet from which to send ships.
 	 */
-	public abstract Planet getSourcePlanet(PlanetWars pw);
-
-	/**
-	 * Function for selecting the planet to which to send ships.
-	 *
-	 * @param pw PlanetWars object from which to derive game state.
-	 * @return The planet to which to send ships.
-	 */
-	public abstract Planet getTargetPlanet(PlanetWars pw);
+	public abstract Action getAction(PlanetWars pw);
 
 
-	public static void DoTurn(PlanetWars pw, Bot bot) {
-		Planet source = bot.getSourcePlanet(pw);
-		Planet target = bot.getTargetPlanet(pw);
 
-		if (source != null && target != null) {
-			pw.IssueOrder(source, target);
+
+	private static void DoTurn(PlanetWars pw,Action action) {
+
+		if (action.isValid()){
+			pw.IssueOrder(action.source, action.target);
+		} else {
+			Action customAction = new CustomBot().getAction(pw);
+			pw.IssueOrder(customAction.source, customAction.target);
 		}
 
 	}
 
-	/**
-	 * Used to interact with the Engine.
-	 *
-	 * @param bot The bot to use to make decisions.
-	 */
+
+
 	public static void execute(Bot bot) {
 		logger = getLogger(bot);
 		String line = "";
@@ -61,19 +58,29 @@ public abstract class Bot {
 			while ((c = System.in.read()) >= 0) {
 				switch (c) {
 					case '\n':
-						if (line.equals("go")) {
+					if (line.equals("go")) {
 							PlanetWars pw = new PlanetWars(message);
-							DoTurn(pw, bot);
-							pw.FinishTurn();
-							message = "";
-						} else {
-							message += line + "\n";
+						Action action = null;
+						try {
+							action = bot.getAction(pw);
+						} catch (Exception e) {
+							StringWriter sw = new StringWriter();
+							PrintWriter pbw = new PrintWriter(sw);
+							e.printStackTrace(pbw);
+							pw.log(sw.toString());
+							logger.info((sw.toString()));
 						}
-						line = "";
-						break;
+						DoTurn(pw, action);
+					pw.FinishTurn();
+					message = "";
+					} else {
+							message += line + "\n";
+					}
+					line = "";
+					break;
 					default:
-						line += (char) c;
-						break;
+					line += (char) c;
+				break;
 				}
 			}
 		} catch (Exception e) {
@@ -84,6 +91,8 @@ public abstract class Bot {
 			System.exit(1); //just stop now. we've got a problem
 		}
 	}
+
+
 
 
 	/**

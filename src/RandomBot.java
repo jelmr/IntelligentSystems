@@ -12,14 +12,14 @@ import java.util.List;
 
 public class RandomBot extends Bot{
 
-	@Override
+
 	public Planet getSourcePlanet(PlanetWars pw) {
 		List<Planet> myPlanets = pw.MyPlanets();
 		int randomPlanet = ((int) (Math.random() * myPlanets.size()));
 		return myPlanets.get(randomPlanet);
 	}
 
-	@Override
+
 	public Planet getTargetPlanet(PlanetWars pw) {
 		List<Planet> notMyPlanets = pw.NotMyPlanets();
 		int randomPlanet = ((int) (Math.random() * notMyPlanets.size()));
@@ -33,4 +33,7 @@ public class RandomBot extends Bot{
 	}
 
 
+	public Action getAction(PlanetWars pw) {
+		return new Action(getSourcePlanet(pw), getTargetPlanet(pw));
+	}
 }

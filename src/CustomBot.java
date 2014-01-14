@@ -10,15 +10,12 @@
 
 public class CustomBot extends Bot{
 
-	@Override
-	public Planet getSourcePlanet(PlanetWars pw) {
-		return Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+	public Action getAction(PlanetWars pw) {
+		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+		Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		return new Action(source, target);
 	}
 
-	@Override
-	public Planet getTargetPlanet(PlanetWars pw) {
-		return Heuristic.select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
-	}
 
 
 	public static void main(String[] args) {

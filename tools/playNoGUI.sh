@@ -1,3 +1,4 @@
+#!/bin/sh
 # a command that works on Linux/Mac
 # the arguments are passed in the same order as in the standard command
 

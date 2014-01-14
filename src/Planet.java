@@ -18,6 +18,7 @@ public class Planet implements Cloneable {
 	@Override
 	public String toString() {
 		return "Planet{" +
+				"ID="+ planetID +
 				"owner=" + owner +
 				", numShips=" + numShips +
 				", growthRate=" + growthRate +

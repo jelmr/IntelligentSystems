@@ -8,45 +8,30 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
-							HOSTILE = 2,
+	HOSTILE = 2,
 							GROWTH_IMPORTANCE = 4;
 
 	List<Planet> planets = new ArrayList<Planet>();
 
+	private int player;
+
 
 	public SimulatedPlanetWars(PlanetWars pw) {
+		this(pw, FRIENDLY);
+	}
+
+
+	public SimulatedPlanetWars(PlanetWars pw, int player) {
+		this.player = player;
 		for (Planet planet : pw.Planets()) {
 			planets.add((Planet) planet.clone());
 		}
 	}
 
 
-	public double CalculateScore() {
-				// CHANGE HERE
 
-			double enemyShips = 1.0;
-			double myShips = 1.0;
-
-			for (Planet planet: EnemyPlanets()){
-				enemyShips += planet.NumShips();
-			}
-
-			for (Planet planet: MyPlanets()){
-				myShips += planet.NumShips();
-			}
-
-			return myShips/enemyShips;
-		}
-
-
-	public int Growth(int playerID) {
-		int growth = 0;
-		for (Planet p : planets) {
-			if (p.Owner() == playerID) {
-				growth += p.GrowthRate();
-			}
-		}
-		return growth;
+	public int notPlayer() {
+		return player == FRIENDLY ? HOSTILE : FRIENDLY;
 	}
 
 
@@ -88,7 +73,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	public List<Planet> MyPlanets() {
 		List<Planet> r = new ArrayList<Planet>();
 		for (Planet p : planets) {
-			if (p.Owner() == FRIENDLY) {
+			if (p.Owner() == player) {
 				r.add(p);
 			}
 		}
@@ -113,7 +98,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	public List<Planet> EnemyPlanets() {
 		List<Planet> r = new ArrayList<Planet>();
 		for (Planet p : planets) {
-			if (p.Owner() >= HOSTILE) {
+			if (p.Owner() >= notPlayer()) {
 				r.add(p);
 			}
 		}
@@ -126,7 +111,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	public List<Planet> NotMyPlanets() {
 		List<Planet> r = new ArrayList<Planet>();
 		for (Planet p : planets) {
-			if (p.Owner() != FRIENDLY) {
+			if (p.Owner() != player) {
 				r.add(p);
 			}
 		}
@@ -135,7 +120,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 
 	public void IssueOrder(Planet source, Planet dest) {
-		SimulateAttack(source, dest);
+		SimulateAttack(this.player, source, dest);
 	}
 
 
@@ -159,6 +144,17 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	}
 
 
+	public int Growth(int playerID) {
+		int growth = 0;
+		for (Planet p : planets) {
+			if (p.Owner() == playerID) {
+				growth += p.GrowthRate();
+			}
+		}
+		return growth;
+	}
+
+
 	// Returns the number of ships that the current player has, either located
 	// on planets or in flight.
 	public int NumShips(int playerID) {
@@ -172,16 +168,11 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	}
 
 
-	public SimulatedPlanetWars SimulateAttack(Planet source, Planet dest) {
-		SimulatedPlanetWars newSpw = new SimulatedPlanetWars(this);
-		return newSpw.SimulateAttack(FRIENDLY, source, dest);
-	}
 
-
-	private SimulatedPlanetWars SimulateAttack(int player, Planet source, Planet dest) {
+	private void SimulateAttack(int player, Planet source, Planet dest) {
 
 		if (source.Owner() != player) {
-			return this;
+			return;
 		}
 
 		// Simulate attack
@@ -201,15 +192,10 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 			planets.set(dest.PlanetID(), newDest);
 		}
 
-		return this;
-
+		SimulateGrowth();
 	}
 
 
-	public SimulatedPlanetWars SimulateEnemyAttack(Planet source, Planet dest) {
-		SimulatedPlanetWars newSpw = new SimulatedPlanetWars(this);
-		return newSpw.SimulateAttack(HOSTILE, source, dest);
-	}
 
 
 	public SimulatedPlanetWars clone() {
