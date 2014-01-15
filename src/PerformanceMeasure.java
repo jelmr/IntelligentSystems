@@ -16,7 +16,7 @@ public interface PerformanceMeasure {
 	public double calculateScore(PlanetWars pw);
 
 
-
+	// neutrale planeten vs vijandelijk
 
 
 	public static class BestGrowthPerShip implements PerformanceMeasure {

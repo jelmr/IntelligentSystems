@@ -1,9 +1,8 @@
-import java.util.List;
 public class ModMaxBot extends Bot{
 
 	@Override
 	public Action getAction(PlanetWars pw) {
-		return (new ModMax()).findBest(pw, PerformanceMeasure.MOST_SHIPS);
+		return Search.MOD_MAX.findBest(pw, PerformanceMeasure.MOST_SHIPS);
 	}
 
 
@@ -11,41 +10,30 @@ public class ModMaxBot extends Bot{
 		Bot bot = new ModMaxBot();
 		Bot.execute(bot);
 	}
+
+
 	static class ModMax extends Search {
 
 		public static final int MAX_DEPTH = 3;
+		public static final int STARTING_DEPTH = 1;
+		public static final int MAX_SCORE = 1;
+		public static final int MIN_SCORE = 0;
 
-
-        public static Planet getLargestPlanet(List<Planet> planets) {
-            if (planets.size() <= 0) {
-                return null;
-            }
-            Planet result = planets.get(0);
-            for (Planet planet : planets) {
-                if (planet.NumShips() > result.NumShips()) {
-                    result = planet;
-                }
-            }
-            return result;
-        }
 
 		@Override
 		public Action findBest(PlanetWars pw, PerformanceMeasure pm) {
 			Planet bestTarget = null;
 			double maxScore = -Double.MAX_VALUE;
 
-
-            Planet source = getLargestPlanet(pw.MyPlanets());
-            for (Planet target : pw.Planets()) {
+			Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+			for (Planet target : pw.Planets()) {
                 if (pw.EnemyPlanets().contains(target) && target.NumShips() > source.NumShips()/2.0) {
                     continue;
                 }
-                SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, Bot.FRIENDLY);
+                SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, FRIENDLY);
                 spw.IssueOrder(source, target);
-
-                spw = new SimulatedPlanetWars(spw, Bot.HOSTILE);
-
-                double score = findBestScore(spw, pm, 1);
+                spw = new SimulatedPlanetWars(spw, HOSTILE);
+                double score = findBestScore(spw, pm, STARTING_DEPTH);
 
                 if (score > maxScore) {
                     bestTarget = target;
@@ -61,43 +49,32 @@ public class ModMaxBot extends Bot{
             int winner = pw.Winner();
 
             if (winner != -1) {
-                return winner == Bot.FRIENDLY ? 1 : 0;
+                return winner == FRIENDLY ? MAX_SCORE : MIN_SCORE;
             }
             if (depth > MAX_DEPTH) {
                 return pm.calculateScore(pw);
             }
             if (pw.MyPlanets().size() <=0) {
-                return 0;
+                return MIN_SCORE;
             }
 
             double maxScore = -Double.MAX_VALUE;
 
-
-            Planet source = getLargestPlanet(pw.MyPlanets());
-
-            
+            Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
 
 
             for (Planet target : pw.Planets()) {
-
                 pw.IssueOrder(source, target);
-
                 SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, pw.notPlayer());
                 double score = findBestScore(spw, pm, depth + 1);
 
-                if (depth % 2 != 0 && score > maxScore) {
-                    // Friendly chooses maximal score
+                if (pw.player == FRIENDLY && score > maxScore) {
                     maxScore = score;
-
-                } else if (depth % 2 == 0 && score < maxScore) {
-                    // Enemy chooses minimal score
+                } else if (pw.player == HOSTILE && score < maxScore) {
                     maxScore = score;
                 }
             }
-
-
             return maxScore;
         }
-
     }
 }

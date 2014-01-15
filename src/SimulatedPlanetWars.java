@@ -121,6 +121,11 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 	public void IssueOrder(Planet source, Planet dest) {
 		SimulateAttack(this.player, source, dest);
+		SimulateGrowth();
+	}
+
+	public void IssueOrder(Action action){
+		IssueOrder(action.source, action.target);
 	}
 
 
@@ -169,7 +174,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 
 
-	private void SimulateAttack(int player, Planet source, Planet dest) {
+	public void SimulateAttack(int player, Planet source, Planet dest) {
 
 		if (source.Owner() != player) {
 			return;
@@ -192,7 +197,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 			planets.set(dest.PlanetID(), newDest);
 		}
 
-		SimulateGrowth();
+
 	}
 
 
