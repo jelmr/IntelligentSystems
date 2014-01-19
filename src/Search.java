@@ -1,5 +1,3 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -40,28 +38,12 @@ public abstract class Search {
 
         while (pq.peek().getPlanetWars().Winner() != Bot.FRIENDLY) {
             State head = pq.poll();
-            for (State newState : getStatePermutations(head)) {
+            for (State newState : State.getStatePermutations(head)) {
                 pq.add(newState);
             }
         }
 
         return pq.peek();
-    }
-
-    public static ArrayList<State> getStatePermutations(State state) {
-
-
-        ArrayList<State> result = new ArrayList<State>();
-
-        for (Planet source : state.getPlanetWars().MyPlanets()) {
-
-            for (Planet target : state.getPlanetWars().Planets()) {
-                SimulatedPlanetWars spw = new SimulatedPlanetWars(state.getPlanetWars());
-                spw.IssueOrder(source, target);
-                result.add(new State(spw, state));
-            }
-        }
-        return result;
     }
 
 }
