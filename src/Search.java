@@ -1,6 +1,3 @@
-import java.util.Comparator;
-import java.util.PriorityQueue;
-
 /**
  * Interface for heuristics. An heuristic attaches a performance-score to a planet.
  *
@@ -12,38 +9,12 @@ import java.util.PriorityQueue;
 
 public abstract class Search {
 
-	public static final Search 	MIN_MAX = new MinMaxBot.MinMax(),
-								MOD_P_MAX = new ModPMaxBot.ModPMax(),
-								MOD_MAX = new ModMaxBot.ModMax();
+	public static final Search MIN_MAX = new MinMaxBot.MinMax(),
+						MOD_P_MAX = new ModPMaxBot.ModPMax(),
+						MOD_MAX = new ModMaxBot.ModMax(),
+						BEST_FIRST = new BestFirstBot.BestFirst();
 
 
-	public abstract Action findBest(PlanetWars pw, PerformanceMeasure pm);
-
-
-    public static State bestFirst(State state, PerformanceMeasure pm) {
-        // Performance measure: 1 is defined as win, 0 as loss.
-
-
-        PriorityQueue<State> pq = new PriorityQueue<State>(100,
-                new Comparator<State>(){
-            public int compare(State a, State b){
-                if (PerformanceMeasure.MOST_PLANETS.calculateScore(a.getPlanetWars()) < PerformanceMeasure.MOST_PLANETS.calculateScore(b.getPlanetWars())) return 1;
-                if (PerformanceMeasure.MOST_PLANETS.calculateScore(a.getPlanetWars()) == PerformanceMeasure.MOST_PLANETS.calculateScore(b.getPlanetWars())) return 0;
-                return -1;
-            }});
-
-
-        // Initialize PQ
-        pq.add(state);
-
-        while (pq.peek().getPlanetWars().Winner() != Bot.FRIENDLY) {
-            State head = pq.poll();
-            for (State newState : State.getStatePermutations(head)) {
-                pq.add(newState);
-            }
-        }
-
-        return pq.peek();
-    }
+	public abstract Action findBest(PlanetWars pw, final PerformanceMeasure pm);
 
 }

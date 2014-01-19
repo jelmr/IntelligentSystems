@@ -8,7 +8,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
-	HOSTILE = 2,
+							HOSTILE = 2,
 							GROWTH_IMPORTANCE = 4;
 
 	List<Planet> planets = new ArrayList<Planet>();
