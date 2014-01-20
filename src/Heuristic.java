@@ -12,12 +12,15 @@ import java.util.List;
 
 public abstract class Heuristic {
 
+
 	public static final Heuristic 	RANDOM = new Random(),
 									FEWEST_SHIPS = new FewestShips(),
 									MOST_SHIPS = new MostShips(),
 									SMALLEST_GENERATION = new SmallestGeneration(),
 									LARGEST_GENERATION = new LargestGeneration(),
 									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost();
+
+	public static final Heuristic[] HEURISTICS = {RANDOM, FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST};
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,

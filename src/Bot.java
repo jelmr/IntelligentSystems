@@ -124,6 +124,9 @@ public abstract class Bot {
 
 
 
+	public String toString(){
+		return "oops...";
+	}
 }
 
 

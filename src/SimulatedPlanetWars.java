@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -11,10 +13,17 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 							HOSTILE = 2,
 							GROWTH_IMPORTANCE = 4;
 
+
+
 	List<Planet> planets = new ArrayList<Planet>();
 
 	public int player;
 
+	public SimulatedPlanetWars(String mapPath){
+		planets = new ArrayList<Planet>();
+		LoadMapFromFile(mapPath);
+		player = Bot.FRIENDLY;
+	}
 
 	public SimulatedPlanetWars(PlanetWars pw) {
 		this(pw, FRIENDLY);
@@ -28,6 +37,73 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 		}
 	}
 
+	// Parses a game state from a string. On success, returns 1. On failure,
+	// returns 0.
+	private int ParseGameState(String s) {
+		planets.clear();
+		int planetID = 0;
+		String[] lines = s.split("\n");
+		for (int i = 0; i < lines.length; ++i) {
+			String line = lines[i];
+			int commentBegin = line.indexOf('#');
+			if (commentBegin >= 0) {
+				line = line.substring(0, commentBegin);
+			}
+			if (line.trim().length() == 0) {
+				continue;
+			}
+			String[] tokens = line.split(" ");
+			if (tokens.length == 0) {
+				continue;
+			}
+			if (tokens[0].equals("P")) {
+				if (tokens.length != 6) {
+					return 0;
+				}
+				double x = Double.parseDouble(tokens[1]);
+				double y = Double.parseDouble(tokens[2]);
+				int owner = Integer.parseInt(tokens[3]);
+				int numShips = Integer.parseInt(tokens[4]);
+				int growthRate = Integer.parseInt(tokens[5]);
+				Planet p = new Planet(planetID++,
+						owner,
+						numShips,
+						growthRate,
+						x, y);
+				planets.add(p);
+			} else if (tokens[0].equals("F")) {
+				if (tokens.length != 7) {
+					return 0;
+				}
+			} else {
+				return 0;
+			}
+		}
+		return 1;
+	}
+
+	private int LoadMapFromFile(String mapFilename) {
+		String s = "";
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new FileReader(mapFilename));
+			int c;
+			while ((c = in.read()) >= 0) {
+				s += (char) c;
+			}
+		} catch (Exception e) {
+			return 0;
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {
+				// Fucked.
+			}
+		}
+
+
+		return ParseGameState(s);
+	}
 
 
 	public int notPlayer() {
@@ -134,18 +210,41 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	// is left) then that player's number is returned. If there are no
 	// remaining players, then the game is a draw and 0 is returned.
 	public int Winner() {
-		Set<Integer> remainingPlayers = new TreeSet<Integer>();
-		for (Planet p : planets) {
-			remainingPlayers.add(p.Owner());
+
+		boolean aliveA = false;
+		boolean aliveB = false;
+
+		for (Planet planet : planets) {
+			if(planet.Owner() == Bot.FRIENDLY) {
+				aliveA = true;
+			} else if (planet.Owner() == Bot.HOSTILE) {
+				aliveB = true;
+			}
 		}
-		switch (remainingPlayers.size()) {
-			case 0:
-				return 0;
-			case 1:
-				return ((Integer) remainingPlayers.toArray()[0]).intValue();
-			default:
-				return -1;
+
+		if(!aliveA && !aliveB){
+			return 0;
+		} else if (!aliveA) {
+			return Bot.HOSTILE;
+		} else if (!aliveB) {
+			return Bot.FRIENDLY;
+		} else {
+			return -1;
 		}
+
+//
+//		Set<Integer> remainingPlayers = new TreeSet<Integer>();
+//		for (Planet p : planets) {
+//			remainingPlayers.add(p.Owner());
+//		}
+//		switch (remainingPlayers.size()) {
+//			case 0:
+//				return 0;
+//			case 1:
+//				return ((Integer) remainingPlayers.toArray()[0]).intValue();
+//			default:
+//				return -1;
+//		}
 	}
 
 

@@ -8,7 +8,11 @@
 
 public class Empty {
 	public static void main(String[] args) {
+		SimulatedPlanetWars spw = new SimulatedPlanetWars("tools/maps/8planets/map1.txt");
 
+		for (Planet planet : spw.EnemyPlanets()) {
+			System.out.printf(String.valueOf(planet));
+		}
 	}
 
 }

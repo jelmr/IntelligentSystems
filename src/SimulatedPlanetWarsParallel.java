@@ -4,9 +4,22 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
+/**
+ * CURRENTLY NOT USING DISTANCE TO PLANETS
+ * CURRENTLY NOT USING DISTANCE TO PLANETS
+ * CURRENTLY NOT USING DISTANCE TO PLANETS
+ * CURRENTLY NOT USING DISTANCE TO PLANETS
+ * CURRENTLY NOT USING DISTANCE TO PLANETS
+ */
+
 public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements Cloneable {
 
 	boolean growNextTurn;
+
+
+	public SimulatedPlanetWarsParallel(String mapPath){
+		super(mapPath);
+	}
 
 	public SimulatedPlanetWarsParallel(PlanetWars pw) {
 		super(pw);

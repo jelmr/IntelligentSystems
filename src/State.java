@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -14,6 +15,25 @@ public class State {
 	public State(PlanetWars pw, State previousState, Action action) {
 		this(pw, previousState);
 		this.setAction(action);
+		this.action = reconstructAction(previousState.pw, pw);
+	}
+
+
+	public static Action reconstructAction(PlanetWars initial, PlanetWars result) {
+		for (int i = 0; i < initial.Planets().size(); i++) {
+			Planet a = initial.Planets().get(i);
+			Planet b = result.Planets().get(i);
+
+			int aShipCount = a.NumShips() + a.GrowthRate();
+			int bShipCount = b.NumShips();
+			int difference = aShipCount - bShipCount;
+
+
+
+
+		}
+
+		return null;
 	}
 
 
