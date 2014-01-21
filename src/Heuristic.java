@@ -18,9 +18,10 @@ public abstract class Heuristic {
 									MOST_SHIPS = new MostShips(),
 									SMALLEST_GENERATION = new SmallestGeneration(),
 									LARGEST_GENERATION = new LargestGeneration(),
-									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost();
+									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost(),
+									TEST_HEURISTIC = new TestHeuristic();
 
-	public static final Heuristic[] HEURISTICS = {RANDOM, FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST};
+	public static final Heuristic[] HEURISTICS = {RANDOM, FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST, TEST_HEURISTIC};
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
@@ -118,6 +119,23 @@ public abstract class Heuristic {
 
 			if (planet.Owner() == ENEMY) {
 				return baseScore * 2.0;
+			} else if (planet.Owner() == FRIENDLY) {
+				return baseScore * 0.5;
+			} else { // if neutral
+				return baseScore;
+			}
+
+		}
+	}
+
+	static class TestHeuristic extends Heuristic {
+
+		@Override
+		public double calculateScore(Planet planet) {
+			double baseScore = ((double) planet.GrowthRate()) / planet.NumShips();
+
+			if (planet.Owner() == ENEMY) {
+				return baseScore * 30.0;
 			} else if (planet.Owner() == FRIENDLY) {
 				return baseScore * 0.5;
 			} else { // if neutral
