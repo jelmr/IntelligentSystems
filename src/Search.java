@@ -1,5 +1,5 @@
 /**
- * Interface for heuristics. An heuristic attaches a performance-score to a planet.
+ * Abstract class for Search algorithms.
  *
  * @author Jelmer Mulder
  * @author Sebastian Österlund
@@ -9,12 +9,19 @@
 
 public abstract class Search {
 
-	public static final Search MIN_MAX = new MinMaxBot.MinMax(),
-						MOD_P_MAX = new ModPMaxBot.ModPMax(),
-						MOD_MAX = new ModMaxBot.ModMax(),
-						BEST_FIRST = new BestFirstBot.BestFirst();
+	public static final Search 	MIN_MAX = new MinMaxBot.MinMax(),
+								MOD_P_MAX = new ModPMaxBot.ModPMax(),
+								MOD_MAX = new ModMaxBot.ModMax(),
+								BEST_FIRST = new BestFirstBot.BestFirst();
 
 
+	/**
+	 * Applies a search algorithm to find the best possible action to take.
+	 *
+	 * @param pw The base state
+	 * @param pm The PerformanceMeasure to evaluate potential states with.
+	 * @return The best action to take.
+	 */
 	public abstract Action findBest(PlanetWars pw, final PerformanceMeasure pm);
 
 }

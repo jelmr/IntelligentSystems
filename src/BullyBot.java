@@ -9,23 +9,15 @@
 
 public class BullyBot extends Bot{
 
-
-	public Planet getSourcePlanet(PlanetWars pw) {
-		return Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-	}
-
-	public Planet getTargetPlanet(PlanetWars pw) {
-		return Heuristic.select(pw.NotMyPlanets(), Heuristic.FEWEST_SHIPS);
+	public Action getAction(PlanetWars pw) {
+		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+		Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.FEWEST_SHIPS);
+		return new Action(source, target);
 	}
 
 
 	public static void main(String[] args) {
 		Bot bot = new BullyBot();
 		Bot.execute(bot);
-	}
-
-
-	public Action getAction(PlanetWars pw) {
-		return new Action(getSourcePlanet(pw), getTargetPlanet(pw));
 	}
 }

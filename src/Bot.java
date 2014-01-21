@@ -21,6 +21,7 @@ public abstract class Bot {
 							FRIENDLY = 1,
 							HOSTILE = 2;
 
+
 	static Logger logger;
 
 
@@ -34,8 +35,11 @@ public abstract class Bot {
 	public abstract Action getAction(PlanetWars pw);
 
 
-
-
+	/**
+	 * Completes a turn. Falls back on CustomBot if the determined action is invalid..
+	 * @param pw Base state.
+	 * @param action Action to issue.
+	 */
 	private static void DoTurn(PlanetWars pw,Action action) {
 
 		if (action.isValid()){
@@ -122,11 +126,6 @@ public abstract class Bot {
 		return logger;
 	}
 
-
-
-	public String toString(){
-		return "oops...";
-	}
 }
 
 

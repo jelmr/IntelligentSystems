@@ -1,4 +1,6 @@
 /**
+ * Dummy class for testing purposes, should be removed!
+ *
  * @author Jelmer Mulder
  * @author Sebastian Österlund
  * @author Yoran Sturkenboom

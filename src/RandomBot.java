@@ -12,28 +12,21 @@ import java.util.List;
 
 public class RandomBot extends Bot{
 
-
-	public Planet getSourcePlanet(PlanetWars pw) {
+	public Action getAction(PlanetWars pw) {
 		List<Planet> myPlanets = pw.MyPlanets();
 		int randomPlanet = ((int) (Math.random() * myPlanets.size()));
-		return myPlanets.get(randomPlanet);
-	}
+		Planet source = myPlanets.get(randomPlanet);
 
-
-	public Planet getTargetPlanet(PlanetWars pw) {
 		List<Planet> notMyPlanets = pw.NotMyPlanets();
-		int randomPlanet = ((int) (Math.random() * notMyPlanets.size()));
-		return notMyPlanets.get(randomPlanet);
+		int randomPlanet1 = ((int) (Math.random() * notMyPlanets.size()));
+		Planet target = notMyPlanets.get(randomPlanet1);
+
+		return new Action(source, target);
 	}
 
 
 	public static void main(String[] args) {
 		Bot bot = new RandomBot();
 		Bot.execute(bot);
-	}
-
-
-	public Action getAction(PlanetWars pw) {
-		return new Action(getSourcePlanet(pw), getTargetPlanet(pw));
 	}
 }

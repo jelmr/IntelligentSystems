@@ -2,21 +2,29 @@ import java.util.List;
 
 
 /**
+ * A class for storing Performance Measures: methods to evaluate a state.
+ *
  * @author Jelmer Mulder
  * @author Sebastian Österlund
  * @author Yoran Sturkenboom
  *         Date: 13/01/14
  */
+
+
 public interface PerformanceMeasure {
 
 	public static final PerformanceMeasure 	MOST_SHIPS = new MostShips(),
 											MOST_PLANETS = new MostPlanets(),
-											MOST_GROWTH = new MostGrowth();
+											MOST_GROWTH = new MostGrowth(),
+											BEST_GROWTH_PER_SHIP = new BestGrowthPerShip();
 
+	/**
+	 * Assign a score to a certain state.
+	 *
+	 * @param pw The state to evaluate.
+	 * @return The score.
+	 */
 	public double calculateScore(PlanetWars pw);
-
-
-	// neutrale planeten vs vijandelijk
 
 
 	public static class BestGrowthPerShip implements PerformanceMeasure {
@@ -24,8 +32,6 @@ public interface PerformanceMeasure {
 		@Override
 		public double calculateScore(PlanetWars pw) {
 			int friendlyNumShips = pw.NumShips(Bot.FRIENDLY);
-
-
 			return ((double) growth(pw.MyPlanets())) / friendlyNumShips;
 		}
 		private static int growth(List<Planet> list){
@@ -37,6 +43,9 @@ public interface PerformanceMeasure {
 		}
     }
 
+	/**
+	 * More planets correspond with a higher score.
+	 */
 	public static class MostPlanets implements PerformanceMeasure {
 
 		@Override
@@ -49,6 +58,9 @@ public interface PerformanceMeasure {
 		}
 	}
 
+	/**
+	 * More ships correspond with a higher score.
+	 */
 	public static class MostShips implements PerformanceMeasure {
 
 		@Override
@@ -59,6 +71,9 @@ public interface PerformanceMeasure {
 		}
 	}
 
+	/**
+	 * Higher percentual total growth rate corresponds with a higher score.
+	 */
 	public static class MostGrowth implements PerformanceMeasure {
 
 		@Override
