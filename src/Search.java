@@ -12,7 +12,8 @@ public abstract class Search {
 	public static final Search 	MIN_MAX = new MinMaxBot.MinMax(),
 								MOD_P_MAX = new ModPMaxBot.ModPMax(),
 								MOD_MAX = new ModMaxBot.ModMax(),
-								BEST_FIRST = new BestFirstBot.BestFirst();
+								BEST_FIRST = new BestFirstBot.BestFirst(),
+								BEAM = new BeamBot.Beam();
 
 
 	/**

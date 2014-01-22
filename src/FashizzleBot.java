@@ -33,7 +33,6 @@ public class FashizzleBot extends Bot{
 				SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, FRIENDLY);
 				spw.IssueOrder(source, target);
 				spw.player = HOSTILE;
-				Bot newBot = new CarnageBot();
 				spw = new SimulatedPlanetWars(spw, HOSTILE);
 				double score = findBestScore(spw, pm, STARTING_DEPTH);
 

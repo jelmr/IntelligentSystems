@@ -21,7 +21,7 @@ public abstract class Heuristic {
 									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost(),
 									TEST_HEURISTIC = new TestHeuristic();
 
-	public static final Heuristic[] HEURISTICS = {RANDOM, FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST, TEST_HEURISTIC};
+	public static final Heuristic[] HEURISTICS = {FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST, TEST_HEURISTIC};
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
@@ -36,7 +36,7 @@ public abstract class Heuristic {
 	 * @return The best planet from the list based on the supplied heuristic.
 	 */
 	public static Planet select(List<Planet> planets, Heuristic heuristic) {
-		Planet maxPlanet = planets.get(0);
+		Planet maxPlanet = null;
 		double maxScore = -Double.MAX_VALUE;
 
 		for (Planet planet : planets) {

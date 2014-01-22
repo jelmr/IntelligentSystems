@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 
 public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
@@ -299,11 +297,28 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 	}
 
+	public static int totalGrowth(PlanetWars pw, int player) {
+		List<Planet> p;
 
+		if (player == Bot.FRIENDLY) {
+			p = pw.MyPlanets();
+		} else if (player == Bot.HOSTILE) {
+			p = pw.EnemyPlanets();
+		} else {
+			p = pw.NeutralPlanets();
+		}
+
+		int result = 0;
+
+		for (Planet planet : p) {
+			result += planet.GrowthRate();
+		}
+
+		return result;
+	}
 
 
 	public SimulatedPlanetWars clone() {
-		SimulatedPlanetWars result = new SimulatedPlanetWars(this);
-		return result;
+		return new SimulatedPlanetWars(this);
 	}
 }

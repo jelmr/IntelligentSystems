@@ -108,6 +108,7 @@ public class Population<T extends DarwinBot> {
 //			}
 			for (String map : MAP_SELECTION) {aScore += simulate(a,new CustomBot(),map);}
 			for (String map : MAP_SELECTION) {aScore += simulate(a,new BullyBot(),map);}
+			for (String map : MAP_SELECTION) {aScore += simulate(a,new CarnageBot(),map);}
 
 
 
@@ -144,7 +145,8 @@ public class Population<T extends DarwinBot> {
 			Action actionB = b.getAction(spw);
 
 			spw.IssueOrder(actionA);
-			if((winner = spw.Winner()) == -1){
+			winner = spw.Winner();
+			if(winner == -1){
 				spw.IssueOrder(actionB);
 			}
 		}

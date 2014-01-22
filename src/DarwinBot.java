@@ -10,13 +10,6 @@
 public abstract class DarwinBot extends Bot{
 
 	/**
-	 * Generates a new, random instance of itself.
-	 *
-	 * @return a new, random instance of itself.
-	 */
-	public abstract DarwinBot getRandomInstance();
-
-	/**
 	 * Generates a new instance of itself with the provided parameters.
 	 *
 	 * @param pars Parameters to initialize itself with.

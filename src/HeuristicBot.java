@@ -45,7 +45,7 @@ public class HeuristicBot extends DarwinBot {
 		List<Planet> targetPlanets;
 
 		if (Math.random() < p) {
-			targetPlanets = pw.NotMyPlanets();
+			targetPlanets = pw.NeutralPlanets();
 
 		} else {
 			targetPlanets = pw.EnemyPlanets();
@@ -63,12 +63,6 @@ public class HeuristicBot extends DarwinBot {
 	@Override
 	public String toString() {
 		return String.format("%d, %d, %.2f", ((int) (heuristicsA * Heuristic.HEURISTICS.length)), ((int) (heuristicsB * Heuristic.HEURISTICS.length)), p);
-	}
-
-
-	@Override
-	public DarwinBot getRandomInstance() {
-		return new HeuristicBot();
 	}
 
 

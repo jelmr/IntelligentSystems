@@ -1,9 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-
 /**
  * CURRENTLY NOT USING DISTANCE TO PLANETS
  * CURRENTLY NOT USING DISTANCE TO PLANETS
