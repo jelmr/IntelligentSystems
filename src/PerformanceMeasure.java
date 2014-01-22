@@ -19,6 +19,17 @@ public interface PerformanceMeasure {
 	// neutrale planeten vs vijandelijk
 
 
+    public static class EnemyShips implements PerformanceMeasure {
+
+        @Override
+        public double calculateScore(PlanetWars pw) {
+            int friendlyNumShips = pw.NumShips(Bot.FRIENDLY);
+            int hostileShips = pw.NumShips(Bot.HOSTILE);
+            int totalNumShips = friendlyNumShips + hostileShips;
+            return 1.0 - ((double) (hostileShips) / totalNumShips);
+        }
+    }
+
 	public static class BestGrowthPerShip implements PerformanceMeasure {
 
 		@Override
