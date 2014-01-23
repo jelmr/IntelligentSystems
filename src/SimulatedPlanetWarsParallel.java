@@ -56,16 +56,16 @@ public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements 
 	private void SimulateTurn(Planet as, Planet at, Planet bs, Planet bt) {
 
 
-		String s = "\n\n===============================\n";
+//		String s = "\n\n===============================\n";
+//
+//		for (Planet planet : planets) {
+//			s+= planet.toString()+"\n";
+//		}
+//		s += "\n\n";
 
-		for (Planet planet : planets) {
-			s+= planet.toString()+"\n";
-		}
-		s += "\n\n";
 
-
-		s += String.format("Action a : %s -- %s (%.3f)\n", as, at, getDistance(as, at));
-		s += String.format("Action b : %s -- %s (%.3f)\n", bs, bt, getDistance(bs, bt));
+//		s += String.format("Action a : %s -- %s (%.3f)\n", as, at, getDistance(as, at));
+//		s += String.format("Action b : %s -- %s (%.3f)\n", bs, bt, getDistance(bs, bt));
 
 		int a = as.Owner();
 		int b = bs.Owner();
@@ -110,14 +110,14 @@ public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements 
 
 
 
-		for (Planet planet : planets) {
-			s+= planet.toString()+"\n";
-		}
-		s += "\n\n";
-
-		s += "\n\n===============================\n";
-
-		System.out.println(s);
+//		for (Planet planet : planets) {
+//			s+= planet.toString()+"\n";
+//		}
+//		s += "\n\n";
+//
+//		s += "\n\n===============================\n";
+//
+//		System.out.println(s);
 	}
 
 

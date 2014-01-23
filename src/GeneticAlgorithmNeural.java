@@ -35,7 +35,7 @@ public class GeneticAlgorithmNeural {
 
 
 	public static final int POP_SIZE = 40,
-							TOURNAMENT_SIZE = 4,
+							TOURNAMENT_SIZE = 7,
 							GENERATIONS_WITH_MUTATION = 100,
 							GENERATIONS_WITHOUT_MUTATION = 5;
 	public static final double 	UNIFORM_RATE = 0.7,
@@ -59,8 +59,6 @@ public class GeneticAlgorithmNeural {
 			evolvePopulation(pop, true);
 
 			generations[i] = pop.copy();
-
-
 			System.out.println("Generation " + i + ": "+pop.getFittest().toString());
 
 
@@ -152,6 +150,11 @@ public class GeneticAlgorithmNeural {
 			pq.add(bs);
 		}
 
+		for (int i = 0; i < pq.size(); i++) {
+			pop.set(i, pq.poll().bot);
+			pop.set(i, pq.poll().bot);
+		}
+
 
 		for (int i = 0; i < BREEDING_RATE * POP_SIZE; i++) {
 			DarwinBot a = pop.get(POP_SIZE - randomRankProportionateIndex(pop));
@@ -160,22 +163,27 @@ public class GeneticAlgorithmNeural {
 			int index = randomRankProportionateIndex(pop);
 			pop.set(index, newBot);
 		}
-
-
 	}
 
 
 	private int randomRankProportionateIndex(Population pop) {
-		double[] cumulative = new double[pop.size()];
+		double[] cumulative = new double[pop.size()-1];
 		cumulative[0] = 1;
+		int sum = 1;
 		for (int i = 1; i < cumulative.length; i++) {
 			cumulative[i] = cumulative[i-1] + i + 1;
+			sum += cumulative[i];
 		}
 
-		int index = Arrays.binarySearch(cumulative, Math.random());
+		int index = Arrays.binarySearch(cumulative, Math.random()*sum);
 
 		if (index < 0) {
-			index = Math.abs(index);
+			index = Math.abs(index+1);
+		}
+
+		if(index >= pop.size()){
+//			System.out.println("Invalid index: "+index+"\n");
+			index = pop.size() - 1;
 		}
 
 		return index;

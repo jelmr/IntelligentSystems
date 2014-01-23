@@ -14,7 +14,7 @@ public class ModMaxBot extends Bot{
 
 	static class ModMax extends Search {
 
-		public static final int MAX_DEPTH = 3;
+		public static final int MAX_DEPTH = 5;
 		public static final int STARTING_DEPTH = 1;
 		public static final int MAX_SCORE = 1;
 		public static final int MIN_SCORE = 0;

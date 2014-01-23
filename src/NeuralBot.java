@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class NeuralBot extends DarwinBot {
 
-	public static final Bot[] BOTS = new Bot[]{new CustomBot(), new BullyBot(), new RandomBot(), new CarnageBot()};
+	public static final Bot[] BOTS = new Bot[]{new CustomBot(), new BullyBot(), new CarnageBot(), new CustomBot()};
 
 	double[] weights;
 

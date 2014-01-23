@@ -35,7 +35,7 @@ public class MinMaxBot extends Bot{
 
 	static class MinMax extends Search {
 
-		public static final int MAX_DEPTH = 3;
+		public static final int MAX_DEPTH = 5;
 
 
 		@Override

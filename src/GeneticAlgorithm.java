@@ -29,9 +29,9 @@
 public class GeneticAlgorithm {
 
 
-	public static final int POP_SIZE = 15,
-							TOURNAMENT_SIZE = 5,
-							GENERATIONS_WITH_MUTATION = 200,
+	public static final int POP_SIZE = 50,
+							TOURNAMENT_SIZE = 8,
+							GENERATIONS_WITH_MUTATION = 20,
 							GENERATIONS_WITHOUT_MUTATION = 4;
 	public static final double 	UNIFORM_RATE = 0.5,
 								MUTATION_RATE = 0.20;
@@ -43,17 +43,15 @@ public class GeneticAlgorithm {
 	public void start() {
 		Population<DarwinBot> pop = fillWithHeuristicBots(POP_SIZE);
 
-//		System.out.println("Start:" + pop.toString());
+		System.out.println("Start:" + pop.toString());
 
 		for (int i = 0; i < GENERATIONS_WITH_MUTATION; i++) {
 			evolvePopulation(pop, true);
-			pop.getFittest();
-//			System.out.println("Generation " + i + ": " + pop.toString());
+			System.out.println("Generation " + i + ": " + pop.toString());
 		}
 		for (int i = 0; i < GENERATIONS_WITHOUT_MUTATION; i++) {
 			evolvePopulation(pop, false);
-			pop.getFittest();
-//			System.out.println("Generation " + i + ": " + pop.toString());
+			System.out.println("Generation " + i + ": " + pop.toString());
 		}
 
 		System.out.println("Generation: " + pop.getFittest().toString());

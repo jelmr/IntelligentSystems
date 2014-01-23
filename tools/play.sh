@@ -11,8 +11,8 @@ MAXT=$6
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-PLAYER1="BullyBot"
-PLAYER2="CustomBot"
+PLAYER1="ModMaxBot"
+PLAYER2="BullyBot"
 
 javac -encoding ISO-8859-1 $PLAYER1.java $PLAYER2.java Bot.java SimulatedPlanetWars.java Heuristic.java PerformanceMeasure.java
 
@@ -20,4 +20,4 @@ echo "Player 1: "$PLAYER1 "(red)"
 echo "Player 2: "$PLAYER2 "(blue)"
 
 
-java -jar $DIR/PlayGame.jar $DIR/maps/larger/map5.txt  "java $PLAYER1 " "java $PLAYER2" parallel $NTURN 4000   | python $DIR/visualizer/visualize_locally.py
+java -jar $DIR/PlayGame.jar $DIR/maps/8planets/map2.txt  "java $PLAYER1 " "java $PLAYER2" parallel $NTURN 4000   | python $DIR/visualizer/visualize_locally.py

@@ -98,8 +98,6 @@ public class Population<T extends DarwinBot> {
 
 			int aScore = getFitness(a);
 
-
-
 			if (aScore > bestScore) {
 				bestScore = aScore;
 				best = a;
@@ -118,10 +116,9 @@ public class Population<T extends DarwinBot> {
 
 	public static int getFitness(DarwinBot a) {
 		int aScore = 0;
-		Bot b = new RandomBot();
-		for (String map : MAP_SELECTION) {aScore += simulate(b,new CustomBot(),map);}
-		for (String map : MAP_SELECTION) {aScore += simulate(b,new BullyBot(),map);}
-		for (String map : MAP_SELECTION) {aScore += simulate(b,new CarnageBot(),map);}
+		for (String map : MAP_SELECTION) {aScore += simulate(a,new CustomBot(),map);}
+		for (String map : MAP_SELECTION) {aScore += simulate(a,new BullyBot(),map);}
+		for (String map : MAP_SELECTION) {aScore += simulate(a,new CarnageBot(),map);}
 		return aScore;
 	}
 
