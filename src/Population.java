@@ -144,6 +144,8 @@ public class Population<T extends DarwinBot> {
 
 
 		while(winner == -1 && turnsLeft-- > 0){
+
+
 			spw.player = Bot.FRIENDLY;
 			Action aAction = a.getAction(spw);
 			spw.player = Bot.HOSTILE;
@@ -154,9 +156,9 @@ public class Population<T extends DarwinBot> {
 				spw.IssueOrder(aAction);
 			}
 
-			winner = spw.Winner();
 
-			if(winner == -1 && bAction != null && bAction.isValid()){
+
+			if(bAction != null && bAction.isValid()){
 				spw.player = Bot.HOSTILE;
 				spw.IssueOrder(bAction);
 			}

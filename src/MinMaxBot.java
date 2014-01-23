@@ -11,7 +11,19 @@ public class MinMaxBot extends Bot{
 
 	@Override
 	public Action getAction(PlanetWars pw) {
-		return Search.MIN_MAX.findBest(pw, PerformanceMeasure.MOST_PLANETS);
+
+
+
+		String s ="\n\n";
+		for (Planet planet : pw.Planets()) {
+			s += planet.toString()+"\n";
+		}
+
+
+
+		Action best = Search.MIN_MAX.findBest(pw, PerformanceMeasure.MOST_PLANETS);
+		logger.info(String.format("%s\n%s - %s", s, best.source, best.target));
+		return best;
 	}
 
 
@@ -23,7 +35,7 @@ public class MinMaxBot extends Bot{
 
 	static class MinMax extends Search {
 
-		public static final int MAX_DEPTH = 4;
+		public static final int MAX_DEPTH = 3;
 
 
 		@Override
@@ -37,10 +49,10 @@ public class MinMaxBot extends Bot{
 				if (source.NumShips() <= 1) {continue;}
 
 				for (Planet target : pw.Planets()) {
-					SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, FRIENDLY);
+					SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, FRIENDLY);
 					spw.IssueOrder(source, target);
 
-					spw = new SimulatedPlanetWars(spw, HOSTILE);
+					spw = new SimulatedPlanetWarsParallel(spw, HOSTILE);
 
 					double score = findBestScore(spw, pm, 1);
 
@@ -56,7 +68,7 @@ public class MinMaxBot extends Bot{
 		}
 
 
-		private double findBestScore(SimulatedPlanetWars pw, PerformanceMeasure pm, int depth) {
+		private double findBestScore(SimulatedPlanetWarsParallel pw, PerformanceMeasure pm, int depth) {
 			int winner = pw.Winner();
 
 			if (winner != -1) {
@@ -77,7 +89,7 @@ public class MinMaxBot extends Bot{
 
 					pw.IssueOrder(source, target);
 
-					SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, pw.notPlayer());
+					SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, pw.notPlayer());
 					double score = findBestScore(spw, pm, depth + 1);
 
                     if (depth % 2 != 0 && score > maxScore) {

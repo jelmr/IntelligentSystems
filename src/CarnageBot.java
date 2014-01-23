@@ -17,17 +17,12 @@ public class CarnageBot extends Bot{
 		}
 
 		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-        Planet target = targetPlanet(pw);
+		Planet target = Heuristic.select(pw.EnemyPlanets(), Heuristic.TEST_HEURISTIC);
 
 //		logger.info(String.format("%s\n%s - %s", s, source, target));
 
 		return new Action(source, target);
 	}
-
-    Planet targetPlanet(PlanetWars pw) {
-        return Heuristic.select(pw.NotMyPlanets(), Heuristic.TEST_HEURISTIC);
-
-    }
 
 
 	public static void main(String[] args) {

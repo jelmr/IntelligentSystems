@@ -231,6 +231,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 //		} else {
 //			return -1;
 //		}
+
 		player = Bot.FRIENDLY;
 		int f = MyPlanets().size();
 		int e = EnemyPlanets().size();

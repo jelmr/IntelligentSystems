@@ -6,13 +6,13 @@ MAP=$1
 PLAYER1=$2
 PLAYER2=$3
 MODE=$4
-NTURN=$5
+NTURN=100
 MAXT=$6
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-PLAYER1="CarnageBot"
-PLAYER2="BullyBot"
+PLAYER1="CustomBot"
+PLAYER2="CarnageBot"
 
 javac -encoding ISO-8859-1 $PLAYER1.java $PLAYER2.java Bot.java SimulatedPlanetWars.java Heuristic.java PerformanceMeasure.java
 
@@ -20,4 +20,4 @@ echo "Player 1: "$PLAYER1 "(red)"
 echo "Player 2: "$PLAYER2 "(blue)"
 
 
-java -jar $DIR/PlayGame.jar $DIR/maps/8planets/map1.txt  "java $PLAYER1 " "java $PLAYER2" parallel $NTURN 4000   | python $DIR/visualizer/visualize_locally.py
+java -jar $DIR/PlayGame.jar $DIR/maps/8planets/map2.txt  "java $PLAYER1 " "java $PLAYER2" parallel $NTURN 4000   | python $DIR/visualizer/visualize_locally.py

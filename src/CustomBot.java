@@ -11,8 +11,19 @@
 public class CustomBot extends Bot{
 
 	public Action getAction(PlanetWars pw) {
+
+		String s ="\n\n";
+		for (Planet planet : pw.Planets()) {
+			s += planet.toString()+"\n";
+		}
+
+
+
+
+
 		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-		Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		Planet target = Heuristic.select(pw.EnemyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+//		logger.info(String.format("%s\n%s - %s", s, source, target));
 		return new Action(source, target);
 	}
 
