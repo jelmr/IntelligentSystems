@@ -27,10 +27,6 @@ public interface PerformanceMeasure {
 	public double calculateScore(PlanetWars pw);
 
 
-<<<<<<< HEAD
-=======
-	// neutrale planeten vs vijandelijk
-
 
     public static class EnemyShips implements PerformanceMeasure {
 
@@ -43,7 +39,6 @@ public interface PerformanceMeasure {
         }
     }
 
->>>>>>> AlphaBeta
 	public static class BestGrowthPerShip implements PerformanceMeasure {
 
 		@Override
