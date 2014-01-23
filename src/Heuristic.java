@@ -117,12 +117,10 @@ public abstract class Heuristic {
 		public double calculateScore(Planet planet) {
 			double baseScore = ((double) planet.GrowthRate()) / planet.NumShips();
 
-			if (planet.Owner() == ENEMY) {
-				return baseScore * 2.0;
-			} else if (planet.Owner() == FRIENDLY) {
-				return baseScore * 0.5;
-			} else { // if neutral
+			if (planet.Owner() == NEUTRAL) {
 				return baseScore;
+			} else { // if enemy
+				return baseScore * 2.;
 			}
 
 		}
@@ -134,12 +132,10 @@ public abstract class Heuristic {
 		public double calculateScore(Planet planet) {
 			double baseScore = ((double) planet.GrowthRate()) / planet.NumShips();
 
-			if (planet.Owner() == ENEMY) {
-				return baseScore * 30.0;
-			} else if (planet.Owner() == FRIENDLY) {
-				return baseScore * 0.5;
-			} else { // if neutral
+			if (planet.Owner() == NEUTRAL) {
 				return baseScore;
+			} else { // if enemy
+				return baseScore * 30.;
 			}
 
 		}

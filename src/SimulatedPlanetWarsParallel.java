@@ -55,6 +55,7 @@ public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements 
 
 	private void SimulateTurn(Planet as, Planet at, Planet bs, Planet bt) {
 
+
 		String s = "\n\n===============================\n";
 
 		for (Planet planet : planets) {
@@ -71,17 +72,17 @@ public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements 
 
 
 		int aPower = as.NumShips() / 2;
-		Planet asTemp = new Planet(as.PlanetID(), as.Owner(), as.NumShips()/2, as.GrowthRate(), as.X(), as.Y());
+		Planet asTemp = new Planet(as.PlanetID(), as.Owner(), as.NumShips() - aPower, as.GrowthRate(), as.X(), as.Y());
 		planets.set(as.PlanetID(), asTemp);
 
 		int bPower = bs.NumShips() / 2;
-		Planet bsTemp = new Planet(bs.PlanetID(), bs.Owner(), bs.NumShips()/2, bs.GrowthRate(), bs.X(), bs.Y());
+		Planet bsTemp = new Planet(bs.PlanetID(), bs.Owner(), bs.NumShips() - bPower, bs.GrowthRate(), bs.X(), bs.Y());
 		planets.set(bs.PlanetID(), bsTemp);
 
 		Planet newAt = GetPlanet(at.PlanetID());
 
 		if(at.Owner() == a){
-			newAt = new Planet(newAt.PlanetID(), a, Math.abs(newAt.NumShips() + aPower), newAt.GrowthRate(), newAt.X(), newAt.Y());
+			newAt = new Planet(newAt.PlanetID(), a, newAt.NumShips() + aPower, newAt.GrowthRate(), newAt.X(), newAt.Y());
 		} else {
 			if(newAt.NumShips() < aPower){ // A will conquer the planet
 				newAt = new Planet(newAt.PlanetID(), a, Math.abs(newAt.NumShips() - aPower), newAt.GrowthRate(), newAt.X(), newAt.Y());
@@ -96,7 +97,7 @@ public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements 
 
 
 		if(bt.Owner() == b){
-			newBt = new Planet(newBt.PlanetID(), b, Math.abs(newBt.NumShips() + bPower), newBt.GrowthRate(), newBt.X(), newBt.Y());
+			newBt = new Planet(newBt.PlanetID(), b, newBt.NumShips() + bPower, newBt.GrowthRate(), newBt.X(), newBt.Y());
 		} else {
 			if(newBt.NumShips() < bPower){ // B will conquer the planet
 				newBt = new Planet(newBt.PlanetID(), b, Math.abs(newBt.NumShips() - bPower), newBt.GrowthRate(), newBt.X(), newBt.Y());

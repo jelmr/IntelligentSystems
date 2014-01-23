@@ -35,7 +35,7 @@ public class Population<T extends DarwinBot> {
 
 
 	public static final int DEFAULT_MAX_BOTS = 20;
-	public static final int MAX_TURNS = 30;
+	public static final int MAX_TURNS = 100;
 
 
 	private List<DarwinBot> bots;

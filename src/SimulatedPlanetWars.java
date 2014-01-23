@@ -174,7 +174,7 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	public List<Planet> EnemyPlanets() {
 		List<Planet> r = new ArrayList<Planet>();
 		for (Planet p : planets) {
-			if (p.Owner() >= notPlayer()) {
+			if (p.Owner() == notPlayer()) {
 				r.add(p);
 			}
 		}

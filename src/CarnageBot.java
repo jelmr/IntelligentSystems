@@ -11,16 +11,21 @@
 public class CarnageBot extends Bot{
 
 	public Action getAction(PlanetWars pw) {
-		String s ="\n\n";
-		for (Planet planet : pw.Planets()) {
+
+		String s ="";
+		for (Planet planet : pw.MyPlanets()) {
+			s += planet.toString()+"\n";
+		}
+		s+="Enemy Planets";
+		for (Planet planet : pw.EnemyPlanets()) {
 			s += planet.toString()+"\n";
 		}
 
 		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-		Planet target = Heuristic.select(pw.EnemyPlanets(), Heuristic.TEST_HEURISTIC);
+		Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.TEST_HEURISTIC);
 
-//		logger.info(String.format("%s\n%s - %s", s, source, target));
-
+//		System.out.printf("\n\nMy Planets: "+s+"\n");
+//		logger.info("\n\nMy Planets: "+s+"\n");
 		return new Action(source, target);
 	}
 
