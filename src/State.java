@@ -54,7 +54,8 @@ public class State {
 		for (Planet source : state.getPlanetWars().MyPlanets()) {
 
 			for (Planet target : state.getPlanetWars().Planets()) {
-				SimulatedPlanetWars spw = new SimulatedPlanetWars(state.getPlanetWars());
+                SimulatedPlanetWarsParallel oldspw = (SimulatedPlanetWarsParallel)state.getPlanetWars();
+                SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(oldspw, oldspw.player);
 				spw.IssueOrder(source, target);
 				Action action = new Action(source, target);
 				result.add(new State(spw, state, action));

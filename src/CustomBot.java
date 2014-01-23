@@ -11,9 +11,11 @@
 public class CustomBot extends Bot{
 
 	public Action getAction(PlanetWars pw) {
-		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-		Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
-		return new Action(source, target);
+		//Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
+		//Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		Planet source = pw.MyPlanets().get(0);
+        Planet target = pw.EnemyPlanets().get(0);
+        return new Action(source, target);
 	}
 
 
