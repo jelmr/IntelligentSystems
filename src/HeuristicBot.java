@@ -62,7 +62,8 @@ public class HeuristicBot extends DarwinBot {
 
 	@Override
 	public String toString() {
-		return String.format("%d, %d, %.2f", ((int) (heuristicsA * Heuristic.HEURISTICS.length)), ((int) (heuristicsB * Heuristic.HEURISTICS.length)), p);
+		return String.format("%.2f, %.2f, %.2f", heuristicsA, heuristicsB, p);
+//		return String.format("%d, %d, %.2f", ((int) (heuristicsA * Heuristic.HEURISTICS.length)), ((int) (heuristicsB * Heuristic.HEURISTICS.length)), p);
 	}
 
 
@@ -86,8 +87,14 @@ public class HeuristicBot extends DarwinBot {
 	}
 
 
+	@Override
+	public DarwinBot copy() {
+		return null;
+	}
+
+
 	public static void main(String[] args) {
-		Bot bot = new HeuristicBot();
+		Bot bot = new HeuristicBot(0.33, 0.52, 0.94);
 		Bot.execute(bot);
 	}
 }

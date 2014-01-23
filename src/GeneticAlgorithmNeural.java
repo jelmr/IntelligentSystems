@@ -1,3 +1,8 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+
 /**
  * Applies a genetic algorithm to find some of the best parameters for a certain bot.
  *
@@ -29,12 +34,13 @@
 public class GeneticAlgorithmNeural {
 
 
-	public static final int POP_SIZE = 50,
-							TOURNAMENT_SIZE = 5,
-							GENERATIONS_WITH_MUTATION = 20,
-							GENERATIONS_WITHOUT_MUTATION = 2;
-	public static final double 	UNIFORM_RATE = 0.5,
-								MUTATION_RATE = 0.20;
+	public static final int POP_SIZE = 40,
+							TOURNAMENT_SIZE = 4,
+							GENERATIONS_WITH_MUTATION = 100,
+							GENERATIONS_WITHOUT_MUTATION = 5;
+	public static final double 	UNIFORM_RATE = 0.7,
+								MUTATION_RATE = 0.10,
+								BREEDING_RATE = 0.2;
 
 
 	/**
@@ -43,19 +49,85 @@ public class GeneticAlgorithmNeural {
 	public void start() {
 		Population<DarwinBot> pop = fillWithNeuralBots(POP_SIZE);
 
-		System.out.println("Start:" + pop.toString());
+//		System.out.println("Start:" + pop.toString());
+
+		Population[] generations = new Population[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION];
+
+
 
 		for (int i = 0; i < GENERATIONS_WITH_MUTATION; i++) {
 			evolvePopulation(pop, true);
-			System.out.println("Generation " + i + ": " + pop.toString());
+
+			generations[i] = pop.copy();
+
+
+			System.out.println("Generation " + i + ": "+pop.getFittest().toString());
+
+
 		}
 		for (int i = 0; i < GENERATIONS_WITHOUT_MUTATION; i++) {
 			evolvePopulation(pop, false);
-			System.out.println("Generation " + i + ": " + pop.toString());
+
+			generations[GENERATIONS_WITH_MUTATION + i] = pop.copy();
+
+			System.out.println("Generation " + i + ": "+pop.getFittest().toString());
 		}
 
 		System.out.println("Generation: " + pop.getFittest().toString());
 
+		//reformatData(generations);
+
+	}
+
+
+	private void reformatData(Population[] generations) {
+		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][55];
+
+		//for (Population generation : generations) { // loop through generations
+		for (int k = 0; k < generations.length; k++) {
+			Population generation = generations[k];
+
+
+			double[] generationResult = new double[55];
+
+			for (int i = 0; i < 55; i++) { // loop through vars
+
+				int[] bins = new int[20];
+
+				for (int j = 0; j < generation.size(); j++) { // loop through bots
+					int bin = (int) (generation.get(j).getPars()[i] / 0.05);
+					bins[bin] = bins[bin] + 1;
+
+
+				}
+
+				int highestIndex = 0;
+				int highestCount = 0;
+
+				for (int j = 0; j < bins.length; j++) {
+					if(bins[j] > highestCount){
+						highestCount = bins[j];
+						highestIndex = j;
+					}
+				}
+
+				generationResult[i] = highestIndex * 0.05;
+
+			}
+
+			experiment[k] = generationResult;
+		}
+		StringBuilder s = new StringBuilder();
+		s.append("\"a\",\"b\"\n");
+		for (int i = 0; i < 55; i++) {
+
+			for (int j = 0; j < experiment.length; j++) {
+
+				s.append(String.format("\"%d\",%f,%d\n", experiment.length*i+j+1, experiment[j][i], j+1));
+			}
+		}
+
+		System.out.print(s.toString());
 	}
 
 
@@ -64,17 +136,49 @@ public class GeneticAlgorithmNeural {
 	 * @param pop The population to evolve.
 	 * @param mutate Whether or not population should mutate.
 	 */
-	public static void evolvePopulation(Population pop, boolean mutate) {
+	public void evolvePopulation(Population pop, boolean mutate) {
+
+		PriorityQueue<BotScore> pq = new PriorityQueue<BotScore>(POP_SIZE, new Comparator<BotScore>() {
+			@Override
+			public int compare(BotScore o1, BotScore o2) {
+				return Integer.compare(o1.score, o2.score);
+			}
+		});
 
 		for (int i = 0; i < pop.size(); i++) {
-			DarwinBot a = tournamentSelect(pop);
-			DarwinBot b = tournamentSelect(pop);
-			DarwinBot newBot = crossover(a, b);
-			if(mutate){
-				newBot = mutate(newBot);
-			}
-			pop.set(i, newBot);
+			DarwinBot bot = pop.get(i);
+			int score = Population.getFitness(bot);
+			BotScore bs = new BotScore(bot, score);
+			pq.add(bs);
 		}
+
+
+		for (int i = 0; i < BREEDING_RATE * POP_SIZE; i++) {
+			DarwinBot a = pop.get(POP_SIZE - randomRankProportionateIndex(pop));
+			DarwinBot b = pop.get(POP_SIZE - randomRankProportionateIndex(pop));
+			DarwinBot newBot = mutate(crossover(a, b));
+			int index = randomRankProportionateIndex(pop);
+			pop.set(index, newBot);
+		}
+
+
+	}
+
+
+	private int randomRankProportionateIndex(Population pop) {
+		double[] cumulative = new double[pop.size()];
+		cumulative[0] = 1;
+		for (int i = 1; i < cumulative.length; i++) {
+			cumulative[i] = cumulative[i-1] + i + 1;
+		}
+
+		int index = Arrays.binarySearch(cumulative, Math.random());
+
+		if (index < 0) {
+			index = Math.abs(index);
+		}
+
+		return index;
 	}
 
 
@@ -109,7 +213,7 @@ public class GeneticAlgorithmNeural {
 		double[] newPars = new double[aPars.length];
 
 		for (int i = 0; i < newPars.length; i++) {
-			newPars[i] = (Math.random() > UNIFORM_RATE ? aPars[i] : bPars[i]);
+			newPars[i] = (Math.random() < UNIFORM_RATE ? aPars[i] : bPars[i]);
 		}
 
 		return a.getInstance(newPars);
@@ -163,4 +267,18 @@ public class GeneticAlgorithmNeural {
 	public static void main(String[] args) {
 		new GeneticAlgorithmNeural().start();
 	}
+
+	private class BotScore {
+
+		int score;
+		DarwinBot bot;
+
+
+		public BotScore(DarwinBot bot, int score) {
+			this.score = score;
+			this.bot = bot;
+		}
+
+	}
+
 }

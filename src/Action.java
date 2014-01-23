@@ -27,4 +27,8 @@ public class Action {
 	}
 
 
+	@Override
+	public String toString() {
+		return (source == null || target == null ? "Game over" : String.format("{%s,%s}", source.PlanetID(), target.PlanetID()));
+	}
 }

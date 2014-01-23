@@ -31,6 +31,6 @@ public abstract class DarwinBot extends Bot{
 	 */
 	public abstract double[] getPars();
 
-
+	public abstract DarwinBot copy();
 
 }

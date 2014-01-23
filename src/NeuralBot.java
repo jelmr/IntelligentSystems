@@ -101,6 +101,14 @@ public class NeuralBot extends DarwinBot {
 	}
 
 
+	@Override
+	public DarwinBot copy() {
+		double[] copy = new double[weights.length];
+		System.arraycopy(weights, 0, copy, 0, weights.length);
+		return new NeuralBot(copy);
+	}
+
+
 	public static void main(String[] args) {
 		Bot bot = new NeuralBot(new double[]{1,1,1,1,1,1,1,1,1,1, 0.9659, 0.1096, 0.8953, 0.0432, 0.2511, 0.5400, 0.5201, 0.2541, 0.2858, 0.2845, 0.6927, 0.0530, 0.7339, 0.5197, 0.5272, 0.8944, 0.2783, 0.6400, 0.8318, 0.5913, 0.6801, 0.2244, 0.9466, 0.7718, 0.0746, 0.6233, 0.1049, 0.6994, 0.3722, 0.8646, 0.4845, 0.8313, 0.2257, 0.7355, 0.0361, 0.6105, 0.2395, 0.9302, 0.9992, 0.9565, 0.5827, 0.9995, 0.4525, 0.8264, 0.6573});
 		Bot.execute(bot);

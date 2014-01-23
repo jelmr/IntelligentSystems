@@ -38,14 +38,14 @@ public class Population<T extends DarwinBot> {
 	public static final int MAX_TURNS = 30;
 
 
-	private List<T> bots;
+	private List<DarwinBot> bots;
 
 
 	/**
 	 * Creates a new empty population.
 	 */
 	Population() {
-		bots = new ArrayList<T>();
+		bots = new ArrayList<DarwinBot>();
 	}
 
 
@@ -54,7 +54,7 @@ public class Population<T extends DarwinBot> {
 	 *
 	 * @param t The bot to add to the population.
 	 */
-	public void add(T t){
+	public void add(DarwinBot t){
 		bots.add(t) ;
 	}
 
@@ -76,7 +76,7 @@ public class Population<T extends DarwinBot> {
 	 * @param i The position of the bot to return.
 	 * @return The bot on position i.
 	 */
-	public T get(int i){
+	public DarwinBot get(int i){
 		return bots.get(i);
 	}
 
@@ -87,28 +87,16 @@ public class Population<T extends DarwinBot> {
 	 *
 	 * @return The best bot of the population.
 	 */
-	public T getFittest(){
+	public DarwinBot getFittest(){
 
 		// Not optimal. In development...
 
-		T best = null;
+		DarwinBot best = null;
 		int bestScore = Integer.MIN_VALUE;
 
-		for (T a : bots) {
+		for (DarwinBot a : bots) {
 
-			int aScore = 0;
-
-//			for (T b : bots) {
-//				if(a != b){
-//					for (String map : MAP_SELECTION) {
-//						aScore += simulate(a,b,map);
-//					}
-//
-//				}
-//			}
-			for (String map : MAP_SELECTION) {aScore += simulate(a,new CustomBot(),map);}
-			for (String map : MAP_SELECTION) {aScore += simulate(a,new BullyBot(),map);}
-			for (String map : MAP_SELECTION) {aScore += simulate(a,new CarnageBot(),map);}
+			int aScore = getFitness(a);
 
 
 
@@ -119,7 +107,22 @@ public class Population<T extends DarwinBot> {
 
 		}
 
+		if(bots.size() == GeneticAlgorithmNeural.POP_SIZE){
+			System.out.print("\n Best:"+bestScore+"\n");
+		}
+
+
 		return best;
+	}
+
+
+	public static int getFitness(DarwinBot a) {
+		int aScore = 0;
+		Bot b = new RandomBot();
+		for (String map : MAP_SELECTION) {aScore += simulate(b,new CustomBot(),map);}
+		for (String map : MAP_SELECTION) {aScore += simulate(b,new BullyBot(),map);}
+		for (String map : MAP_SELECTION) {aScore += simulate(b,new CarnageBot(),map);}
+		return aScore;
 	}
 
 
@@ -133,22 +136,32 @@ public class Population<T extends DarwinBot> {
 	 * 			1: draw
 	 * 			0: bot a lost.
 	 */
-	private int simulate(Bot a, Bot b, String map) {
+	public static int simulate(Bot a, Bot b, String map) {
 		SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(map);
 
 		int turnsLeft = MAX_TURNS;
-		int winner;
+		int winner = -1;
 
 
-		while((winner = spw.Winner()) == -1 && turnsLeft-- > 0){
-			Action actionA = a.getAction(spw);
-			Action actionB = b.getAction(spw);
+		while(winner == -1 && turnsLeft-- > 0){
+			spw.player = Bot.FRIENDLY;
+			Action aAction = a.getAction(spw);
+			spw.player = Bot.HOSTILE;
+			Action bAction = b.getAction(spw);
 
-			spw.IssueOrder(actionA);
-			winner = spw.Winner();
-			if(winner == -1){
-				spw.IssueOrder(actionB);
+			if(aAction != null && aAction.isValid()){
+				spw.player = Bot.FRIENDLY;
+				spw.IssueOrder(aAction);
 			}
+
+			winner = spw.Winner();
+
+			if(winner == -1 && bAction != null && bAction.isValid()){
+				spw.player = Bot.HOSTILE;
+				spw.IssueOrder(bAction);
+			}
+
+			winner = spw.Winner();
 		}
 
 		if(winner == Bot.FRIENDLY){ // a wins
@@ -176,11 +189,21 @@ public class Population<T extends DarwinBot> {
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 
-		for (T bot : bots) {
+		for (DarwinBot bot : bots) {
 			s.append(bot.toString()).append("\n");
 		}
 
 		return s.toString();
 
+	}
+
+	public Population<T> copy(){
+		Population<T> pop = new Population<T>();
+
+		for (DarwinBot bot : bots) {
+			pop.add(bot.copy());
+		}
+
+		return pop;
 	}
 }

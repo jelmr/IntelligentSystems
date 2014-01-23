@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
@@ -209,28 +211,43 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 	// remaining players, then the game is a draw and 0 is returned.
 	public int Winner() {
 
-		boolean aliveA = false;
-		boolean aliveB = false;
+//		boolean aliveA = false;
+//		boolean aliveB = false;
+//
+//		for (Planet planet : planets) {
+//			if(planet.Owner() == Bot.FRIENDLY) {
+//				aliveA = true;
+//			} else if (planet.Owner() == Bot.HOSTILE) {
+//				aliveB = true;
+//			}
+//		}
+//
+//		if(!aliveA && !aliveB){
+//			return 0;
+//		} else if (!aliveA) {
+//			return Bot.HOSTILE;
+//		} else if (!aliveB) {
+//			return Bot.FRIENDLY;
+//		} else {
+//			return -1;
+//		}
+		player = Bot.FRIENDLY;
+		int f = MyPlanets().size();
+		int e = EnemyPlanets().size();
 
-		for (Planet planet : planets) {
-			if(planet.Owner() == Bot.FRIENDLY) {
-				aliveA = true;
-			} else if (planet.Owner() == Bot.HOSTILE) {
-				aliveB = true;
-			}
-		}
-
-		if(!aliveA && !aliveB){
+		if(e==0 && f==0){
 			return 0;
-		} else if (!aliveA) {
-			return Bot.HOSTILE;
-		} else if (!aliveB) {
+		} else if(e==0){
 			return Bot.FRIENDLY;
+		} else if(f==0){
+			return Bot.HOSTILE;
 		} else {
 			return -1;
 		}
 
-//
+
+
+
 //		Set<Integer> remainingPlayers = new TreeSet<Integer>();
 //		for (Planet p : planets) {
 //			remainingPlayers.add(p.Owner());
@@ -273,7 +290,11 @@ public class SimulatedPlanetWars extends PlanetWars implements Cloneable {
 
 	public void SimulateAttack(int player, Planet source, Planet dest) {
 
-		if (source.Owner() != player) {
+
+
+		if (source != null && source.Owner() != player) {
+			System.err.print("Whoops...");
+
 			return;
 		}
 
