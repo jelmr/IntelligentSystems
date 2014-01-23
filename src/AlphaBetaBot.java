@@ -25,9 +25,9 @@ public class AlphaBetaBot extends Bot{
 
 	static class AlphaBetaPruning extends Search {
 
-		public static final int MAX_DEPTH = 6;
+		public static final int MAX_DEPTH = 7;
 
-        private double alphabeta(SimulatedPlanetWars spw, PerformanceMeasure pm, int depth, double alpha, double beta) {
+        private double alphabeta(SimulatedPlanetWarsParallel spw, PerformanceMeasure pm, int depth, double alpha, double beta) {
 
 
             int winner = spw.Winner();
@@ -45,7 +45,7 @@ public class AlphaBetaBot extends Bot{
 
                 ArrayList<State> permutations = State.getStatePermutations(new State(spw));
                 for (State state : permutations) {
-                    SimulatedPlanetWars newspw = (SimulatedPlanetWars)state.getPlanetWars();
+                    SimulatedPlanetWarsParallel newspw = (SimulatedPlanetWarsParallel)state.getPlanetWars();
                     newspw.player=newspw.notPlayer();
                     double score = alphabeta(newspw, pm, depth + 1, alpha, beta);
                     alpha = alpha > score ? alpha : score;
@@ -62,7 +62,7 @@ public class AlphaBetaBot extends Bot{
 
                 ArrayList<State> permutations = State.getStatePermutations(new State(spw));
                 for (State state : permutations) {
-                    SimulatedPlanetWars newspw = (SimulatedPlanetWars)state.getPlanetWars();
+                    SimulatedPlanetWarsParallel newspw = (SimulatedPlanetWarsParallel)state.getPlanetWars();
                     newspw.player=newspw.notPlayer();
                     double score = alphabeta(newspw, pm, depth + 1, alpha, beta);
                     beta = beta < score ? beta : score;
@@ -89,10 +89,10 @@ public class AlphaBetaBot extends Bot{
                 if (source.NumShips() <= 1) {continue;}
 
                 for (Planet target : pw.Planets()) {
-                    SimulatedPlanetWars spw = new SimulatedPlanetWars(pw, FRIENDLY);
+                    SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, FRIENDLY);
                     spw.IssueOrder(source, target);
 
-                    spw = new SimulatedPlanetWars(spw, HOSTILE);
+                    spw = new SimulatedPlanetWarsParallel(spw, HOSTILE);
 
                     double score = alphabeta(spw, pm, 1, -Double.MAX_VALUE, Double.MAX_VALUE);
                     pw.log(score);
