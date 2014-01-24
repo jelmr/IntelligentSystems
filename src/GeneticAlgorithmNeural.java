@@ -34,13 +34,13 @@ import java.util.PriorityQueue;
 public class GeneticAlgorithmNeural {
 
 
-	public static final int POP_SIZE = 40,
+	public static final int POP_SIZE = 50,
 							TOURNAMENT_SIZE = 7,
 							GENERATIONS_WITH_MUTATION = 100,
-							GENERATIONS_WITHOUT_MUTATION = 5;
+							GENERATIONS_WITHOUT_MUTATION = 10;
 	public static final double 	UNIFORM_RATE = 0.7,
-								MUTATION_RATE = 0.10,
-								BREEDING_RATE = 0.2;
+								MUTATION_RATE = 0.20,
+								BREEDING_RATE = 0.4;
 
 
 	/**
@@ -73,7 +73,7 @@ public class GeneticAlgorithmNeural {
 
 		System.out.println("Generation: " + pop.getFittest().toString());
 
-		//reformatData(generations);
+		reformatDataMean(generations);
 
 	}
 
@@ -127,6 +127,43 @@ public class GeneticAlgorithmNeural {
 
 		System.out.print(s.toString());
 	}
+	private void reformatDataMean(Population[] generations) {
+		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][55];
+
+		//for (Population generation : generations) { // loop through generations
+		for (int k = 0; k < generations.length; k++) {
+			Population generation = generations[k];
+
+
+			double[] generationResult = new double[55];
+
+			for (int i = 0; i < 55; i++) { // loop through vars
+
+				double sum = 0;
+
+				for (int j = 0; j < generation.size(); j++) { // loop through bots
+					sum +=  (generation.get(j).getPars()[i]);
+				}
+
+
+				generationResult[i] = sum/generation.size();
+
+			}
+
+			experiment[k] = generationResult;
+		}
+		StringBuilder s = new StringBuilder();
+		s.append("\"a\",\"b\"\n");
+		for (int i = 0; i < 55; i++) {
+
+			for (int j = 0; j < experiment.length; j++) {
+
+				s.append(String.format("\"%d\",%f,%d\n", experiment.length*i+j+1, experiment[j][i], j+1));
+			}
+		}
+
+		System.out.print(s.toString());
+	}
 
 
 	/**
@@ -151,7 +188,6 @@ public class GeneticAlgorithmNeural {
 		}
 
 		for (int i = 0; i < pq.size(); i++) {
-			pop.set(i, pq.poll().bot);
 			pop.set(i, pq.poll().bot);
 		}
 
@@ -183,7 +219,7 @@ public class GeneticAlgorithmNeural {
 
 		if(index >= pop.size()){
 //			System.out.println("Invalid index: "+index+"\n");
-			index = pop.size() - 1;
+			index = pop.size() - 2;
 		}
 
 		return index;

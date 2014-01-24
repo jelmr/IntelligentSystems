@@ -57,7 +57,8 @@ public class NeuralNetwork {
 			// Generate random weights
 			double[] weights = new double[inputValues.length];
 			for (int j = 0; j < inputValues.length; j++) {
-				weights[j] = Math.random();
+//				weights[j] = Math.random();
+				weights[j] = 1;
 			}
 
 			hiddenLayer[i] = new NeuralNode(inputLayer, weights);
@@ -71,7 +72,8 @@ public class NeuralNetwork {
 			// Generate random weights
 			double[] weights = new double[hiddenLayer.length];
 			for (int j = 0; j < hiddenLayer.length; j++) {
-				weights[j] = Math.random();
+//				weights[j] = Math.random();
+				weights[j] = 1;
 			}
 
 			outputLayer[i] = new NeuralNode(hiddenLayer, weights);

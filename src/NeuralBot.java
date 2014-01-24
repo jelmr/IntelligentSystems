@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class NeuralBot extends DarwinBot {
 
-	public static final Bot[] BOTS = new Bot[]{new CustomBot(), new BullyBot(), new CarnageBot(), new CustomBot()};
+	public static final Bot[] BOTS = new Bot[]{new Empty(), new BullyBot(), new Empty(), new Empty()};
 
 	double[] weights;
 
@@ -17,7 +17,8 @@ public class NeuralBot extends DarwinBot {
 		weights= new double[55];
 
 		for (int i = 0; i < weights.length; i++) {
-			weights[i] = Math.random();
+//			weights[i] = Math.random();
+			weights[i] = 0.0001;
 		}
 
 	}
@@ -110,7 +111,7 @@ public class NeuralBot extends DarwinBot {
 
 
 	public static void main(String[] args) {
-		Bot bot = new NeuralBot(new double[]{1,1,1,1,1,1,1,1,1,1, 0.9659, 0.1096, 0.8953, 0.0432, 0.2511, 0.5400, 0.5201, 0.2541, 0.2858, 0.2845, 0.6927, 0.0530, 0.7339, 0.5197, 0.5272, 0.8944, 0.2783, 0.6400, 0.8318, 0.5913, 0.6801, 0.2244, 0.9466, 0.7718, 0.0746, 0.6233, 0.1049, 0.6994, 0.3722, 0.8646, 0.4845, 0.8313, 0.2257, 0.7355, 0.0361, 0.6105, 0.2395, 0.9302, 0.9992, 0.9565, 0.5827, 0.9995, 0.4525, 0.8264, 0.6573});
+		Bot bot = new NeuralBot(new double[]{0.9961, 0.0300, 0.9059, 0.7872, 0.4339, 0.0945, 0.6586, 0.6265, 0.0886, 0.9833, 0.1598, 0.7338, 0.8572, 0.9115, 0.1347, 0.2708, 0.9250, 0.4037, 0.6642, 0.4799, 0.0338, 0.3025, 0.1848, 0.7274, 0.2315, 0.6817, 0.6211, 0.2298, 0.5599, 0.7259, 0.8959, 0.2467, 0.1002, 0.5270, 0.8404, 0.2225, 0.9746, 0.4265, 0.9781, 0.6161, 0.9297, 0.2685, 0.3532, 0.4618, 0.7918, 0.8042, 0.3784, 0.4803, 0.8190, 0.2590, 0.7122, 0.7529, 0.4888, 0.8169, 0.0769});
 		Bot.execute(bot);
 	}
 }

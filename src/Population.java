@@ -164,11 +164,13 @@ public class Population<T extends DarwinBot> {
 		}
 
 		if(winner == Bot.FRIENDLY){ // a wins
+
+
 			return 2;
 		} else if(winner == Bot.HOSTILE){
 			return 0;
 		} else  {
-			return 1;
+			return 0;
 		}
 	}
 

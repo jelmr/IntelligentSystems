@@ -8,7 +8,7 @@
  */
 
 
-public class Empty {
+public class Empty extends Bot {
 	public static void main(String[] args) {
 		SimulatedPlanetWars spw = new SimulatedPlanetWars("tools/maps/8planets/map1.txt");
 
@@ -17,4 +17,9 @@ public class Empty {
 		}
 	}
 
+
+	@Override
+	public Action getAction(PlanetWars pw) {
+		return new Action(pw.MyPlanets().get(0), pw.EnemyPlanets().get(0));
+	}
 }

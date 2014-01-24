@@ -24,6 +24,11 @@ public class SimulatedPlanetWarsParallel extends SimulatedPlanetWars implements 
 		growNextTurn = false;
 	}
 
+	public SimulatedPlanetWarsParallel(SimulatedPlanetWarsParallel pw) {
+		super(pw);
+		this.growNextTurn = pw.growNextTurn;
+	}
+
 
 	public SimulatedPlanetWarsParallel(PlanetWars pw, int player) {
 		super(pw, player);
