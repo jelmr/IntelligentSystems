@@ -45,8 +45,9 @@ public abstract class Bot {
 		if (action.isValid()){
 			pw.IssueOrder(action.source, action.target);
 		} else {
-			Action customAction = new CustomBot().getAction(pw);
-			pw.IssueOrder(customAction.source, customAction.target);
+            System.err.println("Custombot");
+			//Action customAction = (new CustomBot()).getAction(pw);
+			//pw.IssueOrder(customAction.source, customAction.target);
 		}
 
 	}
@@ -63,11 +64,12 @@ public abstract class Bot {
 				switch (c) {
 					case '\n':
 					if (line.equals("go")) {
-							PlanetWars pw = new PlanetWars(message);
+						PlanetWars pw = new PlanetWars(message);
 						Action action = null;
 						try {
 							action = bot.getAction(pw);
 						} catch (Exception e) {
+
 							StringWriter sw = new StringWriter();
 							PrintWriter pbw = new PrintWriter(sw);
 							e.printStackTrace(pbw);
@@ -75,8 +77,8 @@ public abstract class Bot {
 							logger.info((sw.toString()));
 						}
 						DoTurn(pw, action);
-					pw.FinishTurn();
-					message = "";
+					    pw.FinishTurn();
+					    message = "";
 					} else {
 							message += line + "\n";
 					}
