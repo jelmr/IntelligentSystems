@@ -79,7 +79,7 @@ public class Simulator {
 		return getDistance(action.source, action.target);
 	}
 
-	public  int getDistance(Planet a, Planet b){
+	public static int getDistance(Planet a, Planet b){
 		double dx = a.X() - b.X();
 		double dy = a.Y() - b.Y();
 		return (int) Math.ceil(Math.sqrt(dx * dx + dy * dy));

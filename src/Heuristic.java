@@ -21,7 +21,7 @@ public abstract class Heuristic {
 									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost(),
 									TEST_HEURISTIC = new TestHeuristic();
 
-	public static Heuristic[] HEURISTICS = {RANDOM, FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST};
+	public static Heuristic[] HEURISTICS = {FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST};
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,

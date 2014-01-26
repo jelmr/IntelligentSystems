@@ -35,12 +35,12 @@ public class GeneticAlgorithmNeural {
 
 
 	public static final int POP_SIZE = 50,
-							TOURNAMENT_SIZE = 7,
+							TOURNAMENT_SIZE = 6,
 							GENERATIONS_WITH_MUTATION = 100,
 							GENERATIONS_WITHOUT_MUTATION = 10;
 	public static final double 	UNIFORM_RATE = 0.7,
-								MUTATION_RATE = 0.20,
-								BREEDING_RATE = 0.4;
+								MUTATION_RATE = 0.05,
+								BREEDING_RATE = 0.3;
 
 
 	/**
@@ -50,25 +50,26 @@ public class GeneticAlgorithmNeural {
 		Population<DarwinBot> pop = fillWithNeuralBots(POP_SIZE);
 
 //		System.out.println("Start:" + pop.toString());
+		System.out.print("\"time\",\"Best\", \"Average\",\"Worst\"\n");
 
 		Population[] generations = new Population[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION];
 
 
 
 		for (int i = 0; i < GENERATIONS_WITH_MUTATION; i++) {
-			evolvePopulation(pop, true);
+			evolvePopulationTournament(pop, true);
 
 			generations[i] = pop.copy();
-			System.out.println("Generation " + i + ": "+pop.getFittest().toString());
+			pop.getFittest();
 
 
 		}
 		for (int i = 0; i < GENERATIONS_WITHOUT_MUTATION; i++) {
-			evolvePopulation(pop, false);
+			evolvePopulationTournament(pop, false);
 
 			generations[GENERATIONS_WITH_MUTATION + i] = pop.copy();
 
-			System.out.println("Generation " + i + ": "+pop.getFittest().toString());
+			pop.getFittest();
 		}
 
 		System.out.println("Generation: " + pop.getFittest().toString());
@@ -79,16 +80,17 @@ public class GeneticAlgorithmNeural {
 
 
 	private void reformatData(Population[] generations) {
-		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][55];
+		int parCount = generations[0].get(0).getPars().length;
+		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][parCount];
+
 
 		//for (Population generation : generations) { // loop through generations
 		for (int k = 0; k < generations.length; k++) {
 			Population generation = generations[k];
 
+			double[] generationResult = new double[parCount];
 
-			double[] generationResult = new double[55];
-
-			for (int i = 0; i < 55; i++) { // loop through vars
+			for (int i = 0; i < parCount; i++) { // loop through vars
 
 				int[] bins = new int[20];
 
@@ -117,7 +119,7 @@ public class GeneticAlgorithmNeural {
 		}
 		StringBuilder s = new StringBuilder();
 		s.append("\"a\",\"b\"\n");
-		for (int i = 0; i < 55; i++) {
+		for (int i = 0; i < parCount; i++) {
 
 			for (int j = 0; j < experiment.length; j++) {
 
@@ -128,16 +130,17 @@ public class GeneticAlgorithmNeural {
 		System.out.print(s.toString());
 	}
 	private void reformatDataMean(Population[] generations) {
-		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][55];
+		int parCount = generations[0].get(0).getPars().length;
+		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][parCount];
 
 		//for (Population generation : generations) { // loop through generations
 		for (int k = 0; k < generations.length; k++) {
 			Population generation = generations[k];
 
 
-			double[] generationResult = new double[55];
+			double[] generationResult = new double[parCount];
 
-			for (int i = 0; i < 55; i++) { // loop through vars
+			for (int i = 0; i < parCount; i++) { // loop through vars
 
 				double sum = 0;
 
@@ -154,7 +157,7 @@ public class GeneticAlgorithmNeural {
 		}
 		StringBuilder s = new StringBuilder();
 		s.append("\"a\",\"b\"\n");
-		for (int i = 0; i < 55; i++) {
+		for (int i = 0; i < parCount; i++) {
 
 			for (int j = 0; j < experiment.length; j++) {
 
@@ -165,6 +168,20 @@ public class GeneticAlgorithmNeural {
 		System.out.print(s.toString());
 	}
 
+	public static void evolvePopulationTournament(Population pop, boolean mutate) {
+
+		for (int i = 0; i < pop.size(); i++) {
+			if(Math.random() > BREEDING_RATE){
+				DarwinBot a = tournamentSelect(pop);
+				DarwinBot b = tournamentSelect(pop);
+				DarwinBot newBot = crossover(a, b);
+				if(mutate){
+					newBot = mutate(newBot);
+				}
+				pop.set(i, newBot);
+			}
+		}
+	}
 
 	/**
 	 * Evolves the population exactly one generation.
@@ -193,8 +210,8 @@ public class GeneticAlgorithmNeural {
 
 
 		for (int i = 0; i < BREEDING_RATE * POP_SIZE; i++) {
-			DarwinBot a = pop.get(POP_SIZE - randomRankProportionateIndex(pop));
-			DarwinBot b = pop.get(POP_SIZE - randomRankProportionateIndex(pop));
+			DarwinBot a = pop.get((POP_SIZE - 1) - randomRankProportionateIndex(pop));
+			DarwinBot b = pop.get((POP_SIZE - 1) - randomRankProportionateIndex(pop));
 			DarwinBot newBot = mutate(crossover(a, b));
 			int index = randomRankProportionateIndex(pop);
 			pop.set(index, newBot);
@@ -217,9 +234,9 @@ public class GeneticAlgorithmNeural {
 			index = Math.abs(index+1);
 		}
 
-		if(index >= pop.size()){
+		if(index >= pop.size() ){
 //			System.out.println("Invalid index: "+index+"\n");
-			index = pop.size() - 2;
+			index = pop.size() - 1;
 		}
 
 		return index;

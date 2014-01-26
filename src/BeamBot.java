@@ -18,13 +18,14 @@ public class BeamBot extends Bot {
 
 	@Override
 	public Action getAction(PlanetWars pw) {
-		return Search.BEAM.findBest(pw, PerformanceMeasure.MOST_SHIPS);
+		return Search.BEAM.findBest(pw, PerformanceMeasure.MOST_GROWTH);
 	}
 
 
 	public static class Beam extends Search {
 
 		public static final int BEAM_WIDTH = 3;
+		public static final int MAX_DEPTH = 10;
 
 
 		@Override
@@ -35,7 +36,7 @@ public class BeamBot extends Bot {
 			PriorityQueue<PlanetScore> pq = new PriorityQueue<PlanetScore>(pw.NotMyPlanets().size(),
 					new Comparator<PlanetScore>() {
 						public int compare(PlanetScore a, PlanetScore b) {
-							return Double.compare(a.score, b.score);
+							return -Double.compare(a.score, b.score);
 						}
 					});
 
@@ -58,10 +59,11 @@ public class BeamBot extends Bot {
 				SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, Bot.FRIENDLY);
 				spw.IssueOrder(friendlyAction);
 				if (spw.Winner() != -1) {
+					spw.player = Bot.HOSTILE;
 					spw.IssueOrder(enemyAction);
 				}
 
-				double stateScore = getScoreRecursive(spw, 1);
+				double stateScore = getScoreRecursive(spw, pm, 1);
 
 				if (stateScore > bestScore) {
 					bestScore = stateScore;
@@ -73,12 +75,10 @@ public class BeamBot extends Bot {
 			return bestAction;
 		}
 
-		private double getScoreRecursive(PlanetWars pw, int depth){
-			if(depth > 5){
-				return 0;
+		private double getScoreRecursive(SimulatedPlanetWarsParallel pw, PerformanceMeasure pm, int depth){
+			if(depth > MAX_DEPTH){
+				return pm.calculateScore(pw);
 			}
-
-
 
 
 			Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
@@ -86,7 +86,7 @@ public class BeamBot extends Bot {
 			PriorityQueue<PlanetScore> pq = new PriorityQueue<PlanetScore>(pw.NotMyPlanets().size(),
 					new Comparator<PlanetScore>() {
 						public int compare(PlanetScore a, PlanetScore b) {
-							return Double.compare(a.score, b.score);
+							return -Double.compare(a.score, b.score);
 						}
 					});
 
@@ -97,6 +97,7 @@ public class BeamBot extends Bot {
 			}
 
 			double bestScore = -Double.MAX_VALUE;
+			SimulatedPlanetWarsParallel bestState = null;
 
 			for (int i = 0; i < BEAM_WIDTH; i++) {
 				Planet planet = pq.poll().planet;
@@ -108,6 +109,7 @@ public class BeamBot extends Bot {
 				SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, Bot.FRIENDLY);
 				spw.IssueOrder(friendlyAction);
 				if (spw.Winner() != -1) {
+					spw.player = Bot.HOSTILE;
 					spw.IssueOrder(enemyAction);
 				}
 
@@ -115,11 +117,12 @@ public class BeamBot extends Bot {
 
 				if (stateScore > bestScore) {
 					bestScore = stateScore;
+					bestState = spw;
 				}
 
 			}
 
-			return bestScore;
+			return getScoreRecursive(bestState, pm, depth + 1);
 		}
 
 		private class PlanetScore {

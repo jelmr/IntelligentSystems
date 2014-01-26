@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-
-
 /**
  * @author Jelmer Mulder
  * @author Sebastian Österlund
@@ -14,13 +11,73 @@ public class NeuralNetwork {
 
 
 	public NeuralNetwork() {
-		double[] pars = new double[7];
+		this(7, 5, 4);
+	}
+
+
+	public NeuralNetwork(int inputSize, int hiddenSize, int outputSize) {
+		double[] pars = new double[inputSize];
 
 		for (int i = 0; i < pars.length; i++) {
 			pars[i] = Math.random();
 		}
 
-		root = builtNetwork(pars);
+		root = builtNetwork(pars, hiddenSize, outputSize);
+	}
+
+
+	public NeuralNetwork(int hiddenSize, int outputSize, double... pars) {
+		root = builtNetwork(pars, hiddenSize, outputSize);
+	}
+
+
+	private Node[] builtNetwork(double[] inputValues, int hiddenSize, int outputSize) {
+		// Created input layer
+
+		Node[] inputLayer = new Node[inputValues.length];
+
+		for (int i = 0; i < inputValues.length; i++) {
+			inputLayer[i] = new InputNode(inputValues[i]);
+		}
+
+		// Create hidden layer
+		Node[] hiddenLayer = new NeuralNode[hiddenSize];
+
+		for (int i = 0; i < hiddenLayer.length; i++) {
+			// Generate random weights
+			double[] weights = new double[inputValues.length];
+			for (int j = 0; j < inputValues.length; j++) {
+//				weights[j] = Math.random();
+				weights[j] = 1;
+			}
+
+			hiddenLayer[i] = new NeuralNode(inputLayer, weights);
+		}
+
+		//Create output layer
+
+		Node[] outputLayer = new NeuralNode[outputSize];
+
+		for (int i = 0; i < outputLayer.length; i++) {
+			// Generate random weights
+			double[] weights = new double[hiddenLayer.length];
+			for (int j = 0; j < hiddenLayer.length; j++) {
+//				weights[j] = Math.random();
+				weights[j] = 1;
+			}
+
+			outputLayer[i] = new NeuralNode(hiddenLayer, weights);
+		}
+
+		layers = new Node[][]{inputLayer, hiddenLayer, outputLayer};
+
+		return outputLayer;
+
+	}
+
+
+	public static void main(String[] args) {
+		new NeuralNetwork();
 	}
 
 
@@ -38,62 +95,6 @@ public class NeuralNetwork {
 				}
 			}
 		}
-	}
-
-
-	private Node[] builtNetwork(double[] inputValues) {
-		// Created input layer
-
-		Node[] inputLayer = new Node[inputValues.length];
-
-		for (int i = 0; i < inputValues.length; i++) {
-			inputLayer[i] = new InputNode(inputValues[i]);
-		}
-
-		// Create hidden layer
-		Node[] hiddenLayer = new NeuralNode[5];
-
-		for (int i = 0; i < hiddenLayer.length; i++) {
-			// Generate random weights
-			double[] weights = new double[inputValues.length];
-			for (int j = 0; j < inputValues.length; j++) {
-//				weights[j] = Math.random();
-				weights[j] = 1;
-			}
-
-			hiddenLayer[i] = new NeuralNode(inputLayer, weights);
-		}
-
-		//Create output layer
-
-		Node[] outputLayer = new NeuralNode[4];
-
-		for (int i = 0; i < outputLayer.length; i++) {
-			// Generate random weights
-			double[] weights = new double[hiddenLayer.length];
-			for (int j = 0; j < hiddenLayer.length; j++) {
-//				weights[j] = Math.random();
-				weights[j] = 1;
-			}
-
-			outputLayer[i] = new NeuralNode(hiddenLayer, weights);
-		}
-
-
-		layers = new Node[][]{inputLayer, hiddenLayer, outputLayer};
-
-		return outputLayer;
-
-	}
-
-
-	public NeuralNetwork(double... pars) {
-		root = builtNetwork(pars);
-	}
-
-
-	public static void main(String[] args) {
-		new NeuralNetwork();
 	}
 
 
@@ -126,6 +127,7 @@ public class NeuralNetwork {
 	private interface Node {
 
 		void clearCache();
+
 		double getValue();
 	}
 
@@ -145,8 +147,6 @@ public class NeuralNetwork {
 		}
 
 
-
-
 		@Override
 		public void clearCache() {
 			cached = false;
@@ -156,7 +156,6 @@ public class NeuralNetwork {
 			}
 
 		}
-
 
 
 		@Override
@@ -192,7 +191,6 @@ public class NeuralNetwork {
 		@Override
 		public void clearCache() {
 		}
-
 
 
 		@Override

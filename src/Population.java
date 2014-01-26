@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class Population<T extends DarwinBot> {
 
+	static int counter = 0;
+
 	/**
 	 * The maps on which the robots are tested.
 	 */
@@ -88,25 +90,30 @@ public class Population<T extends DarwinBot> {
 	 * @return The best bot of the population.
 	 */
 	public DarwinBot getFittest(){
-
 		// Not optimal. In development...
 
 		DarwinBot best = null;
+		int sum = 0;
+		int worstScore = Integer.MAX_VALUE;
 		int bestScore = Integer.MIN_VALUE;
 
 		for (DarwinBot a : bots) {
-
 			int aScore = getFitness(a);
+			sum +=aScore;
 
 			if (aScore > bestScore) {
 				bestScore = aScore;
 				best = a;
 			}
 
+			if(aScore < worstScore){
+				worstScore = aScore;
+			}
+
 		}
 
 		if(bots.size() == GeneticAlgorithmNeural.POP_SIZE){
-			System.out.print("\n Best:"+bestScore+"\n");
+			System.out.printf("\"%d\", %d, %d, %f, %d\n", counter++, counter, bestScore,((double) sum)/bots.size(), worstScore  );
 		}
 
 

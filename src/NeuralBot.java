@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -9,12 +10,18 @@ import java.util.Arrays;
  */
 public class NeuralBot extends DarwinBot {
 
-	public static final Bot[] BOTS = new Bot[]{new Empty(), new BullyBot(), new Empty(), new Empty()};
+	public static final Bot[] BOTS = new Bot[]{new Empty(), new BullyBot(), new Empty(), new Empty(), new CustomBot()};
 
 	double[] weights;
 
 	public NeuralBot() {
-		weights= new double[55];
+		int inputSize = 7;
+		int hiddenSize = 9;
+		int outputSize = 2*Heuristic.HEURISTICS.length+2;
+
+
+		int size = inputSize*hiddenSize + hiddenSize*outputSize;
+		weights= new double[size];
 
 		for (int i = 0; i < weights.length; i++) {
 //			weights[i] = Math.random();
@@ -25,6 +32,67 @@ public class NeuralBot extends DarwinBot {
 
 	public NeuralBot(double[] weights) {
 		this.weights = weights;
+	}
+
+
+	public Action getAction(PlanetWars pw) {
+		int friendlyPlanetCount = pw.MyPlanets().size();
+		int hostilePlanetCount = pw.EnemyPlanets().size();
+		int neutralPlanetCount = pw.NeutralPlanets().size();
+		int friendlyShipCount = pw.NumShips(Bot.FRIENDLY);
+		int hostileShipCount = pw.NumShips(Bot.HOSTILE);
+		int friendlyGrowth = SimulatedPlanetWars.totalGrowth(pw, Bot.FRIENDLY);
+		int hostileGrowth = SimulatedPlanetWars.totalGrowth(pw, Bot.HOSTILE);
+
+		int heuristicCount = Heuristic.HEURISTICS.length;
+
+		NeuralNetwork network = new NeuralNetwork(9, heuristicCount *2+2,friendlyPlanetCount, hostilePlanetCount, neutralPlanetCount,
+				friendlyShipCount, hostileShipCount, friendlyGrowth, hostileGrowth);
+
+		network.setWeights(weights);
+
+		double bestValue = 0;
+		Heuristic bestSource = null;
+
+		double[] result = network.getValues();
+
+		for (int i = 0; i < heuristicCount; i++) {
+			if (result[i] > bestValue) {
+				bestValue = result[i];
+				bestSource = Heuristic.HEURISTICS[i];
+			}
+		}
+
+
+
+		bestValue = 0;
+		Heuristic bestTarget = null;
+
+		for (int i = 0; i < heuristicCount; i++) {
+			if (result[i+heuristicCount] > bestValue) {
+				bestValue = result[i+heuristicCount];
+				bestTarget = Heuristic.HEURISTICS[i];
+			}
+		}
+
+		List<Planet> planets = null;
+
+		if(result[heuristicCount *2] > result[heuristicCount *2 + 1]){
+			planets = pw.EnemyPlanets();
+		} else {
+			planets = pw.NeutralPlanets();
+		}
+
+		Planet source = Heuristic.select(pw.MyPlanets(), bestSource);
+		Planet target = Heuristic.select(planets, bestTarget);
+
+		return new Action(source, target);
+	}
+
+
+	@Override
+	public DarwinBot getInstance(double... pars) {
+		return new NeuralBot(pars);
 	}
 
 
@@ -42,37 +110,6 @@ public class NeuralBot extends DarwinBot {
 		}
 
 		return bestBot;
-	}
-
-
-	public Action getAction(PlanetWars pw) {
-		int friendlyPlanetCount = pw.MyPlanets().size();
-		int hostilePlanetCount = pw.EnemyPlanets().size();
-		int neutralPlanetCount = pw.NeutralPlanets().size();
-		int friendlyShipCount = pw.NumShips(Bot.FRIENDLY);
-		int hostileShipCount = pw.NumShips(Bot.HOSTILE);
-		int friendlyGrowth = SimulatedPlanetWars.totalGrowth(pw, Bot.FRIENDLY);
-		int hostileGrowth = SimulatedPlanetWars.totalGrowth(pw, Bot.HOSTILE);
-
-
-
-
-		NeuralNetwork network = new NeuralNetwork(friendlyPlanetCount, hostilePlanetCount, neutralPlanetCount,
-				friendlyShipCount, hostileShipCount, friendlyGrowth, hostileGrowth);
-
-		network.setWeights(weights);
-
-		Bot bot = getBot(network);
-
-//		pw.log(bot.getClass().getSimpleName());
-
-		return bot.getAction(pw);
-	}
-
-
-	@Override
-	public DarwinBot getInstance(double... pars) {
-		return new NeuralBot(pars);
 	}
 
 
