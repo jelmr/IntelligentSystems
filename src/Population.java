@@ -112,7 +112,7 @@ public class Population<T extends DarwinBot> {
 
 		}
 
-		if(bots.size() == GeneticAlgorithmNeural.POP_SIZE){
+		if(bots.size() == GeneticAlgorithm.POP_SIZE){
 			System.out.printf("\"%d\", %d, %d, %f, %d\n", counter++, counter, bestScore,((double) sum)/bots.size(), worstScore  );
 		}
 

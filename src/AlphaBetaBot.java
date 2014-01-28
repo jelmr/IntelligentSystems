@@ -25,7 +25,7 @@ public class AlphaBetaBot extends Bot{
 
 	static class AlphaBetaPruning extends Search {
 
-		public static final int MAX_DEPTH = 4;
+		public static final int MAX_DEPTH = 3;
 
         private double alphabeta(SimulatedPlanetWarsParallel spw, PerformanceMeasure pm, int depth, double alpha, double beta) {
 

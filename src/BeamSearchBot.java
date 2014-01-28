@@ -55,51 +55,21 @@ public class BeamSearchBot extends Bot {
 	@Override
 	public Action getAction(PlanetWars pw) {
 
-		SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw);
-		spw.player = Bot.HOSTILE;
-		Action enemyAction = new CompetitionBot().getAction(spw);
+		SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, HOSTILE);
+		Bot enemyBot = new BullyBot();
+		Action enemyAction = enemyBot.getAction(spw);
 
-		spw.player = Bot.FRIENDLY;
+		spw.player = FRIENDLY;
+		Bot friendlyBot = new CompetitionBot();
 
-		Action[] actions = new Action[BEAM_WIDTH];
-
-//		System.out.printf("%s\n", new CompetitionBot().getAction(spw).toString());
-
-		for (int i = 0; i < BEAM_WIDTH; i++) {
-			SimulatedPlanetWarsParallel newspw = new SimulatedPlanetWarsParallel(spw);
-			CompetitionBot friendlyBot = new CompetitionBot();
-			Action action = friendlyBot.getAction(newspw);
-			action.target.AddShips(10000);
-			actions[i] = action;
-		}
-
-		for (Action action : actions) {
-			action.target.RemoveShips(10000);
-		}
-
-		int bestScore = Integer.MAX_VALUE;
-		Action bestAction = null;
+			Action friendlyAction = friendlyBot.getAction(spw);
 
 
-		for (Action action : actions) {
-//			System.out.printf("Actions: %s\n", action.toString());
-			SimulatedPlanetWarsParallel newspw = new SimulatedPlanetWarsParallel(spw);
-			newspw.player = Bot.FRIENDLY;
-			newspw.IssueOrder(action.getAction());
-			newspw.player = Bot.HOSTILE;
-			newspw.IssueOrder(enemyAction.getAction());
-			newspw.player = Bot.FRIENDLY;
+		spw.IssueOrder(friendlyAction);
+		spw.player = HOSTILE;
+		spw.IssueOrder(enemyAction);
 
-			int score = recursiveBeamSearch(newspw, 0);
-
-			if(score < bestScore){
-				bestScore = score;
-				bestAction = action.getAction();
-			}
-
-		}
-
-		return bestAction;
+		return null;
 	}
 
 

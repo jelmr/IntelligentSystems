@@ -1,3 +1,8 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+
 /**
  * Applies a genetic algorithm to find some of the best parameters for a certain bot.
  *
@@ -30,51 +35,211 @@ public class GeneticAlgorithm {
 
 
 	public static final int POP_SIZE = 50,
-							TOURNAMENT_SIZE = 8,
-							GENERATIONS_WITH_MUTATION = 20,
-							GENERATIONS_WITHOUT_MUTATION = 4;
-	public static final double 	UNIFORM_RATE = 0.5,
-								MUTATION_RATE = 0.20;
+							TOURNAMENT_SIZE = 6,
+							GENERATIONS_WITH_MUTATION = 50,
+							GENERATIONS_WITHOUT_MUTATION = 10;
+	public static final double 	UNIFORM_RATE = 0.7,
+								MUTATION_RATE = 0.05,
+								BREEDING_RATE = 0.3;
 
 
 	/**
 	 * Runs the algorithm.
 	 */
 	public void start() {
-		Population<DarwinBot> pop = fillWithHeuristicBots(POP_SIZE);
+		Population<DarwinBot> pop = fillWithNeuralBots(POP_SIZE);
 
-		System.out.println("Start:" + pop.toString());
+//		System.out.println("Start:" + pop.toString());
+		System.out.print("\"time\",\"Best\", \"Average\",\"Worst\"\n");
+
+		Population[] generations = new Population[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION];
+
+
 
 		for (int i = 0; i < GENERATIONS_WITH_MUTATION; i++) {
-			evolvePopulation(pop, true);
-			System.out.println("Generation " + i + ": " + pop.toString());
+			evolvePopulationTournament(pop, true);
+
+			generations[i] = pop.copy();
+			pop.getFittest();
+
+
 		}
 		for (int i = 0; i < GENERATIONS_WITHOUT_MUTATION; i++) {
-			evolvePopulation(pop, false);
-			System.out.println("Generation " + i + ": " + pop.toString());
+			evolvePopulationTournament(pop, false);
+
+			generations[GENERATIONS_WITH_MUTATION + i] = pop.copy();
+
+			pop.getFittest();
 		}
 
 		System.out.println("Generation: " + pop.getFittest().toString());
 
+		reformatDataMean(generations);
+
 	}
 
+
+	private void reformatData(Population[] generations) {
+		int parCount = generations[0].get(0).getPars().length;
+		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][parCount];
+
+
+		//for (Population generation : generations) { // loop through generations
+		for (int k = 0; k < generations.length; k++) {
+			Population generation = generations[k];
+
+			double[] generationResult = new double[parCount];
+
+			for (int i = 0; i < parCount; i++) { // loop through vars
+
+				int[] bins = new int[20];
+
+				for (int j = 0; j < generation.size(); j++) { // loop through bots
+					int bin = (int) (generation.get(j).getPars()[i] / 0.05);
+					bins[bin] = bins[bin] + 1;
+
+
+				}
+
+				int highestIndex = 0;
+				int highestCount = 0;
+
+				for (int j = 0; j < bins.length; j++) {
+					if(bins[j] > highestCount){
+						highestCount = bins[j];
+						highestIndex = j;
+					}
+				}
+
+				generationResult[i] = highestIndex * 0.05;
+
+			}
+
+			experiment[k] = generationResult;
+		}
+		StringBuilder s = new StringBuilder();
+		s.append("\"a\",\"b\"\n");
+		for (int i = 0; i < parCount; i++) {
+
+			for (int j = 0; j < experiment.length; j++) {
+
+				s.append(String.format("\"%d\",%f,%d\n", experiment.length*i+j+1, experiment[j][i], j+1));
+			}
+		}
+
+		System.out.print(s.toString());
+	}
+	private void reformatDataMean(Population[] generations) {
+		int parCount = generations[0].get(0).getPars().length;
+		double[][] experiment = new double[GENERATIONS_WITH_MUTATION+GENERATIONS_WITHOUT_MUTATION][parCount];
+
+		//for (Population generation : generations) { // loop through generations
+		for (int k = 0; k < generations.length; k++) {
+			Population generation = generations[k];
+
+
+			double[] generationResult = new double[parCount];
+
+			for (int i = 0; i < parCount; i++) { // loop through vars
+
+				double sum = 0;
+
+				for (int j = 0; j < generation.size(); j++) { // loop through bots
+					sum +=  (generation.get(j).getPars()[i]);
+				}
+
+
+				generationResult[i] = sum/generation.size();
+
+			}
+
+			experiment[k] = generationResult;
+		}
+		StringBuilder s = new StringBuilder();
+		s.append("\"a\",\"b\"\n");
+		for (int i = 0; i < parCount; i++) {
+
+			for (int j = 0; j < experiment.length; j++) {
+
+				s.append(String.format("\"%d\",%f,%d\n", experiment.length*i+j+1, experiment[j][i], j+1));
+			}
+		}
+
+		System.out.print(s.toString());
+	}
+
+	public static void evolvePopulationTournament(Population pop, boolean mutate) {
+
+		for (int i = 0; i < pop.size(); i++) {
+			if(Math.random() > BREEDING_RATE){
+				DarwinBot a = tournamentSelect(pop);
+				DarwinBot b = tournamentSelect(pop);
+				DarwinBot newBot = crossover(a, b);
+				if(mutate){
+					newBot = mutate(newBot);
+				}
+				pop.set(i, newBot);
+			}
+		}
+	}
 
 	/**
 	 * Evolves the population exactly one generation.
 	 * @param pop The population to evolve.
 	 * @param mutate Whether or not population should mutate.
 	 */
-	public static void evolvePopulation(Population pop, boolean mutate) {
+	public void evolvePopulation(Population pop, boolean mutate) {
+
+		PriorityQueue<BotScore> pq = new PriorityQueue<BotScore>(POP_SIZE, new Comparator<BotScore>() {
+			@Override
+			public int compare(BotScore o1, BotScore o2) {
+				return Integer.compare(o1.score, o2.score);
+			}
+		});
 
 		for (int i = 0; i < pop.size(); i++) {
-			DarwinBot a = tournamentSelect(pop);
-			DarwinBot b = tournamentSelect(pop);
-			DarwinBot newBot = crossover(a, b);
-			if(mutate){
-				newBot = mutate(newBot);
-			}
-			pop.set(i, newBot);
+			DarwinBot bot = pop.get(i);
+			int score = Population.getFitness(bot);
+			BotScore bs = new BotScore(bot, score);
+			pq.add(bs);
 		}
+
+		for (int i = 0; i < pq.size(); i++) {
+			pop.set(i, pq.poll().bot);
+		}
+
+
+		for (int i = 0; i < BREEDING_RATE * POP_SIZE; i++) {
+			DarwinBot a = pop.get((POP_SIZE - 1) - randomRankProportionateIndex(pop));
+			DarwinBot b = pop.get((POP_SIZE - 1) - randomRankProportionateIndex(pop));
+			DarwinBot newBot = mutate(crossover(a, b));
+			int index = randomRankProportionateIndex(pop);
+			pop.set(index, newBot);
+		}
+	}
+
+
+	private int randomRankProportionateIndex(Population pop) {
+		double[] cumulative = new double[pop.size()-1];
+		cumulative[0] = 1;
+		int sum = 1;
+		for (int i = 1; i < cumulative.length; i++) {
+			cumulative[i] = cumulative[i-1] + i + 1;
+			sum += cumulative[i];
+		}
+
+		int index = Arrays.binarySearch(cumulative, Math.random()*sum);
+
+		if (index < 0) {
+			index = Math.abs(index+1);
+		}
+
+		if(index >= pop.size() ){
+//			System.out.println("Invalid index: "+index+"\n");
+			index = pop.size() - 1;
+		}
+
+		return index;
 	}
 
 
@@ -109,7 +274,7 @@ public class GeneticAlgorithm {
 		double[] newPars = new double[aPars.length];
 
 		for (int i = 0; i < newPars.length; i++) {
-			newPars[i] = (Math.random() > UNIFORM_RATE ? aPars[i] : bPars[i]);
+			newPars[i] = (Math.random() < UNIFORM_RATE ? aPars[i] : bPars[i]);
 		}
 
 		return a.getInstance(newPars);
@@ -126,7 +291,7 @@ public class GeneticAlgorithm {
 		Population<DarwinBot> tournament = new Population<DarwinBot>();
 
 		for (int i = 0; i < TOURNAMENT_SIZE; i++) {
-			HeuristicBot random = (HeuristicBot) pop.get((int) (Math.random()*pop.size()));
+			DarwinBot random = pop.get((int) (Math.random()*pop.size()));
 			tournament.add(random);
 		}
 
@@ -150,7 +315,31 @@ public class GeneticAlgorithm {
 	}
 
 
+	private Population<DarwinBot> fillWithNeuralBots(int popSize) {
+		Population<DarwinBot> pop = new Population<DarwinBot>();
+
+		for (int i = 0; i < popSize; i++) {
+			pop.add(new NeuralBot());
+		}
+		return pop;
+	}
+
+
 	public static void main(String[] args) {
 		new GeneticAlgorithm().start();
 	}
+
+	private class BotScore {
+
+		int score;
+		DarwinBot bot;
+
+
+		public BotScore(DarwinBot bot, int score) {
+			this.score = score;
+			this.bot = bot;
+		}
+
+	}
+
 }

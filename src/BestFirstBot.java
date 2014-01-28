@@ -70,7 +70,6 @@ public class BestFirstBot extends Bot {
 				}
 			}
 
-			logger.info("I AM FREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
 			return pq.peek();
 		}
