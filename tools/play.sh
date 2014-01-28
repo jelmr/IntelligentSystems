@@ -11,8 +11,8 @@ MAXT=$6
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-PLAYER1="BeamBot"
-PLAYER2="LookaheadBot"
+PLAYER1="BeamSearchBot"
+PLAYER2="CarnageBot"
 
 javac -encoding ISO-8859-1 $PLAYER1.java $PLAYER2.java Bot.java SimulatedPlanetWars.java Heuristic.java PerformanceMeasure.java
 

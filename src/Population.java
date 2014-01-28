@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Population<T extends DarwinBot> {
 
-	static int counter = 0;
+	static int counter = 1;
 
 	/**
 	 * The maps on which the robots are tested.
@@ -126,6 +126,7 @@ public class Population<T extends DarwinBot> {
 		for (String map : MAP_SELECTION) {aScore += simulate(a,new CustomBot(),map);}
 		for (String map : MAP_SELECTION) {aScore += simulate(a,new BullyBot(),map);}
 		for (String map : MAP_SELECTION) {aScore += simulate(a,new CarnageBot(),map);}
+//		for (String map : MAP_SELECTION) {aScore += simulate(a,new LookaheadBot(),map);}
 		return aScore;
 	}
 

@@ -25,7 +25,7 @@ public class AlphaBetaBot extends Bot{
 
 	static class AlphaBetaPruning extends Search {
 
-		public static final int MAX_DEPTH = 7;
+		public static final int MAX_DEPTH = 4;
 
         private double alphabeta(SimulatedPlanetWarsParallel spw, PerformanceMeasure pm, int depth, double alpha, double beta) {
 
@@ -95,7 +95,7 @@ public class AlphaBetaBot extends Bot{
                     spw = new SimulatedPlanetWarsParallel(spw, HOSTILE);
 
                     double score = alphabeta(spw, pm, 1, -Double.MAX_VALUE, Double.MAX_VALUE);
-                    pw.log(score);
+//                    pw.log(score);
 
                     if (score > maxScore) {
                         bestSource = source;
@@ -105,8 +105,8 @@ public class AlphaBetaBot extends Bot{
 
                 }
             }
-            pw.log("Max: ");
-            pw.log(maxScore);
+//            pw.log("Max: ");
+//            pw.log(maxScore);
             return new Action(bestSource, bestTarget);
         }
 

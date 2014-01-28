@@ -24,8 +24,8 @@ public class BeamBot extends Bot {
 
 	public static class Beam extends Search {
 
-		public static final int BEAM_WIDTH = 3;
-		public static final int MAX_DEPTH = 10;
+		public static final int BEAM_WIDTH = 1;
+		public static final int MAX_DEPTH = 7;
 
 
 		@Override
@@ -50,26 +50,27 @@ public class BeamBot extends Bot {
 			Action bestAction = null;
 
 			for (int i = 0; i < BEAM_WIDTH; i++) {
-				Planet planet = pq.poll().planet;
-				Action friendlyAction = new Action(source, planet);
+				if(pq.size() > 0){
+					Planet planet = pq.poll().planet;
+					Action friendlyAction = new Action(source, planet);
 
-				Bot bot = new CarnageBot();
-				Action enemyAction = bot.getAction(pw);
+					Bot bot = new CompetitionBot();
+					Action enemyAction = bot.getAction(pw);
 
-				SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, Bot.FRIENDLY);
-				spw.IssueOrder(friendlyAction);
-				if (spw.Winner() != -1) {
-					spw.player = Bot.HOSTILE;
-					spw.IssueOrder(enemyAction);
+					SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, Bot.FRIENDLY);
+					spw.IssueOrder(friendlyAction);
+					if (spw.Winner() != -1) {
+						spw.player = Bot.HOSTILE;
+						spw.IssueOrder(enemyAction);
+					}
+
+					double stateScore = getScoreRecursive(spw, pm, 1);
+
+					if (stateScore > bestScore) {
+						bestScore = stateScore;
+						bestAction = friendlyAction;
+					}
 				}
-
-				double stateScore = getScoreRecursive(spw, pm, 1);
-
-				if (stateScore > bestScore) {
-					bestScore = stateScore;
-					bestAction = friendlyAction;
-				}
-
 			}
 
 			return bestAction;
@@ -100,26 +101,27 @@ public class BeamBot extends Bot {
 			SimulatedPlanetWarsParallel bestState = null;
 
 			for (int i = 0; i < BEAM_WIDTH; i++) {
-				Planet planet = pq.poll().planet;
-				Action friendlyAction = new Action(source, planet);
+				if(pq.size() > 0){
+					Planet planet = pq.poll().planet;
+					Action friendlyAction = new Action(source, planet);
 
-				Bot bot = new CarnageBot();
-				Action enemyAction = bot.getAction(pw);
+					Bot bot = new CompetitionBot();
+					Action enemyAction = bot.getAction(pw);
 
-				SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, Bot.FRIENDLY);
-				spw.IssueOrder(friendlyAction);
-				if (spw.Winner() != -1) {
-					spw.player = Bot.HOSTILE;
-					spw.IssueOrder(enemyAction);
+					SimulatedPlanetWarsParallel spw = new SimulatedPlanetWarsParallel(pw, Bot.FRIENDLY);
+					spw.IssueOrder(friendlyAction);
+					if (spw.Winner() != -1) {
+						spw.player = Bot.HOSTILE;
+						spw.IssueOrder(enemyAction);
+					}
+
+					double stateScore = PerformanceMeasure.MOST_SHIPS.calculateScore(spw);
+
+					if (stateScore > bestScore) {
+						bestScore = stateScore;
+						bestState = spw;
+					}
 				}
-
-				double stateScore = PerformanceMeasure.MOST_SHIPS.calculateScore(spw);
-
-				if (stateScore > bestScore) {
-					bestScore = stateScore;
-					bestState = spw;
-				}
-
 			}
 
 			return getScoreRecursive(bestState, pm, depth + 1);

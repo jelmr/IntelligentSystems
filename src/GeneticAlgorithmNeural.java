@@ -36,7 +36,7 @@ public class GeneticAlgorithmNeural {
 
 	public static final int POP_SIZE = 50,
 							TOURNAMENT_SIZE = 6,
-							GENERATIONS_WITH_MUTATION = 100,
+							GENERATIONS_WITH_MUTATION = 50,
 							GENERATIONS_WITHOUT_MUTATION = 10;
 	public static final double 	UNIFORM_RATE = 0.7,
 								MUTATION_RATE = 0.05,

@@ -31,4 +31,9 @@ public class Action {
 	public String toString() {
 		return (source == null || target == null ? "Game over" : String.format("{%s,%s}", source.PlanetID(), target.PlanetID()));
 	}
+
+
+	Action getAction() {
+		return new Action((Planet) source.clone(),(Planet) target.clone());
+	}
 }
