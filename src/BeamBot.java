@@ -24,7 +24,7 @@ public class BeamBot extends Bot {
 
 	public static class Beam extends Search {
 
-		public static final int BEAM_WIDTH = 1;
+		public static final int BEAM_WIDTH = 3;
 		public static final int MAX_DEPTH = 7;
 
 

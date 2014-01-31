@@ -19,7 +19,7 @@ public class CompetitionBot extends Bot{
 	public Action getAction(PlanetWars pw) {
 
 		int planetsCount = pw.Planets().size();
-		if (planetsCount == 8) {
+		if (planetsCount == 8 || (planetsCount >= 18 && planetsCount <= 22)) {
 			return new CarnageBot().getAction(pw);
 		}
 

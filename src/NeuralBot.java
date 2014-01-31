@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class NeuralBot extends DarwinBot {
 
-	public static final Bot[] BOTS = new Bot[]{new Empty(), new BullyBot(), new Empty(), new Empty(), new CustomBot()};
+	public static final Bot[] BOTS = new Bot[]{new CompetitionBot(), new BullyBot(), new CarnageBot(), new Empty(), new CustomBot()};
 
 	double[] weights;
 
