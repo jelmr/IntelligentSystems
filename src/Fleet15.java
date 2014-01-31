@@ -2,14 +2,14 @@
    For Week 1 we don't need it.
 */
 
-public class Fleet implements Comparable, Cloneable {
+public class Fleet15 implements Comparable, Cloneable {
     // Initializes a fleet.
-    public Fleet(int owner,
-		 int numShips,
-		 int sourcePlanet,
-		 int destinationPlanet,
-		 int totalTripLength,
-		 int turnsRemaining) {
+    public Fleet15(int owner,
+				   int numShips,
+				   int sourcePlanet,
+				   int destinationPlanet,
+				   int totalTripLength,
+				   int turnsRemaining) {
 	this.owner = owner;
 	this.numShips = numShips;
 	this.sourcePlanet = sourcePlanet;
@@ -19,8 +19,8 @@ public class Fleet implements Comparable, Cloneable {
     }
 
     // Initializes a fleet.
-    public Fleet(int owner,
-		 int numShips) {
+    public Fleet15(int owner,
+				   int numShips) {
 	this.owner = owner;
 	this.numShips = numShips;
 	this.sourcePlanet = -1;
@@ -71,7 +71,7 @@ public class Fleet implements Comparable, Cloneable {
     }
 
     public int compareTo(Object o) {
-	Fleet f = (Fleet)o;
+	Fleet15 f = (Fleet15)o;
 	return this.numShips - f.numShips;
     }
 
@@ -82,7 +82,7 @@ public class Fleet implements Comparable, Cloneable {
     private int totalTripLength;
     private int turnsRemaining;
 	
-	private Fleet(Fleet _f) {
+	private Fleet15(Fleet15 _f) {
 		owner = _f.owner;
 		numShips = _f.numShips;
 		sourcePlanet = _f.sourcePlanet;
@@ -91,6 +91,6 @@ public class Fleet implements Comparable, Cloneable {
 		turnsRemaining = _f.turnsRemaining;
 	}
 	public Object clone() {
-		return new Fleet(this);
+		return new Fleet15(this);
 	}
 }

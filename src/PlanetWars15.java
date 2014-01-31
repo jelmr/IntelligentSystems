@@ -13,23 +13,23 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
-public class PlanetWars {
+public class PlanetWars15 {
 
 	// Store all the planets and fleets. OMG we wouldn't wanna lose all the
 	// planets and fleets, would we!?
-	private ArrayList<Planet> planets;
-	private ArrayList<Fleet> fleets;
+	private ArrayList<Planet15> planets;
+	private ArrayList<Fleet15> fleets;
 
 
-	public PlanetWars() {
+	public PlanetWars15() {
 	} //just an empty constructor for cloning purposes
 
 
-	// Constructs a PlanetWars object instance, given a string containing a
+	// Constructs a PlanetWars15 object instance, given a string containing a
 	// description of a game state.
-	public PlanetWars(String gameStateString) {
-		planets = new ArrayList<Planet>();
-		fleets = new ArrayList<Fleet>();
+	public PlanetWars15(String gameStateString) {
+		planets = new ArrayList<Planet15>();
+		fleets = new ArrayList<Fleet15>();
 		ParseGameState(gameStateString);
 	}
 
@@ -63,7 +63,7 @@ public class PlanetWars {
 				int owner = Integer.parseInt(tokens[3]);
 				int numShips = Integer.parseInt(tokens[4]);
 				int growthRate = Integer.parseInt(tokens[5]);
-				Planet p = new Planet(planetID++,
+				Planet15 p = new Planet15(planetID++,
 						owner,
 						numShips,
 						growthRate,
@@ -79,7 +79,7 @@ public class PlanetWars {
 				int destination = Integer.parseInt(tokens[4]);
 				int totalTripLength = Integer.parseInt(tokens[5]);
 				int turnsRemaining = Integer.parseInt(tokens[6]);
-				Fleet f = new Fleet(owner,
+				Fleet15 f = new Fleet15(owner,
 						numShips,
 						source,
 						destination,
@@ -102,7 +102,7 @@ public class PlanetWars {
 
 	// Returns the planet with the given planet_id. There are NumPlanets()
 	// planets. They are numbered starting at 0.
-	public Planet GetPlanet(int planetID) {
+	public Planet15 GetPlanet(int planetID) {
 		return planets.get(planetID);
 	}
 
@@ -116,22 +116,22 @@ public class PlanetWars {
 	// Returns the fleet with the given fleet_id. Fleets are numbered starting
 	// with 0. There are NumFleets() fleets. fleet_id's are not consistent from
 	// one turn to the next.
-	public Fleet GetFleet(int fleetID) {
+	public Fleet15 GetFleet(int fleetID) {
 		return fleets.get(fleetID);
 	}
 
 
 	// Returns a list of all the planets.
-	public List<Planet> Planets() {
+	public List<Planet15> Planets() {
 		return planets;
 	}
 
 
 	// Return a list of all the planets owned by the current player. By
 	// convention, the current player is always player number 1.
-	public List<Planet> MyPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	public List<Planet15> MyPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 			if (p.Owner() == 1) {
 				r.add(p);
 			}
@@ -141,9 +141,9 @@ public class PlanetWars {
 
 
 	// Return a list of all neutral planets.
-	public List<Planet> NeutralPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	public List<Planet15> NeutralPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 			if (p.Owner() == 0) {
 				r.add(p);
 			}
@@ -154,9 +154,9 @@ public class PlanetWars {
 
 	// Return a list of all the planets owned by rival players. This excludes
 	// planets owned by the current player, as well as neutral planets.
-	public List<Planet> EnemyPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	public List<Planet15> EnemyPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 			if (p.Owner() >= 2) {
 				r.add(p);
 			}
@@ -167,9 +167,9 @@ public class PlanetWars {
 
 	// Return a list of all the planets that are not owned by the current
 	// player. This includes all enemy planets and neutral planets.
-	public List<Planet> NotMyPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	public List<Planet15> NotMyPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 			if (p.Owner() != 1) {
 				r.add(p);
 			}
@@ -179,9 +179,9 @@ public class PlanetWars {
 
 
 	// Return a list of all the fleets.
-	public List<Fleet> Fleets() {
-		List<Fleet> r = new ArrayList<Fleet>();
-		for (Fleet f : fleets) {
+	public List<Fleet15> Fleets() {
+		List<Fleet15> r = new ArrayList<Fleet15>();
+		for (Fleet15 f : fleets) {
 			r.add(f);
 		}
 		return r;
@@ -202,9 +202,9 @@ public class PlanetWars {
 
 
 	// Return a list of all the fleets owned by the current player.
-	public List<Fleet> MyFleets() {
-		List<Fleet> r = new ArrayList<Fleet>();
-		for (Fleet f : fleets) {
+	public List<Fleet15> MyFleets() {
+		List<Fleet15> r = new ArrayList<Fleet15>();
+		for (Fleet15 f : fleets) {
 			if (f.Owner() == 1) {
 				r.add(f);
 			}
@@ -223,9 +223,9 @@ public class PlanetWars {
 
 
 	// Return a list of all the fleets owned by enemy players.
-	public List<Fleet> EnemyFleets() {
-		List<Fleet> r = new ArrayList<Fleet>();
-		for (Fleet f : fleets) {
+	public List<Fleet15> EnemyFleets() {
+		List<Fleet15> r = new ArrayList<Fleet15>();
+		for (Fleet15 f : fleets) {
 			if (f.Owner() != 1) {
 				r.add(f);
 			}
@@ -238,8 +238,8 @@ public class PlanetWars {
 	// integer. This is the number of discrete time steps it takes to get
 	// between the two planets.
 	public int Distance(int sourcePlanet, int destinationPlanet) {
-		Planet source = planets.get(sourcePlanet);
-		Planet destination = planets.get(destinationPlanet);
+		Planet15 source = planets.get(sourcePlanet);
+		Planet15 destination = planets.get(destinationPlanet);
 		double dx = source.X() - destination.X();
 		double dy = source.Y() - destination.Y();
 		return (int) Math.ceil(Math.sqrt(dx * dx + dy * dy));
@@ -253,7 +253,7 @@ public class PlanetWars {
 	}
 
 
-	public void IssueOrder(Planet source, Planet dest) {
+	public void IssueOrder(Planet15 source, Planet15 dest) {
 		System.out.println("" + source.PlanetID() + " " + dest.PlanetID());
 		System.out.flush();
 	}
@@ -270,12 +270,12 @@ public class PlanetWars {
 	// Returns true if the named player owns at least one planet or fleet.
 	// Otherwise, the player is deemed to be dead and false is returned.
 	public boolean IsAlive(int playerID) {
-		for (Planet p : planets) {
+		for (Planet15 p : planets) {
 			if (p.Owner() == playerID) {
 				return true;
 			}
 		}
-		for (Fleet f : fleets) {
+		for (Fleet15 f : fleets) {
 			if (f.Owner() == playerID) {
 				return true;
 			}
@@ -290,10 +290,10 @@ public class PlanetWars {
 	// remaining players, then the game is a draw and 0 is returned.
 	public int Winner() {
 		Set<Integer> remainingPlayers = new TreeSet<Integer>();
-		for (Planet p : planets) {
+		for (Planet15 p : planets) {
 			remainingPlayers.add(p.Owner());
 		}
-		for (Fleet f : fleets) {
+		for (Fleet15 f : fleets) {
 			remainingPlayers.add(f.Owner());
 		}
 		switch (remainingPlayers.size()) {
@@ -311,12 +311,12 @@ public class PlanetWars {
 	// on planets or in flight.
 	public int NumShips(int playerID) {
 		int numShips = 0;
-		for (Planet p : planets) {
+		for (Planet15 p : planets) {
 			if (p.Owner() == playerID) {
 				numShips += p.NumShips();
 			}
 		}
-		for (Fleet f : fleets) {
+		for (Fleet15 f : fleets) {
 			if (f.Owner() == playerID) {
 				numShips += f.NumShips();
 			}
@@ -327,7 +327,7 @@ public class PlanetWars {
 
 	// Loads a map from a text file. The text file contains a description of
 	// the starting state of a game. See the project wiki for a description of
-	// the file format. It should be called the Planet Wars Point-in-Time
+	// the file format. It should be called the Planet15 Wars Point-in-Time
 	// format. On success, return 1. On failure, returns 0.
 	private int LoadMapFromFile(String mapFilename) {
 		String s = "";
@@ -362,7 +362,7 @@ public class PlanetWars {
 
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		for (Planet p : planets) {
+		for (Planet15 p : planets) {
 			// We can't use String.format here because in certain locales, the ,
 			// and . get switched for X and Y (yet just appending them using the
 			// default toString methods apparently doesn't switch them?)

@@ -4,18 +4,18 @@
  * @author Yoran Sturkenboom
  *         Date: 22/01/14
  */
-public class NeuralNetwork {
+public class NeuralNetwork15 {
 
 	Node[][] layers;
 	Node[] root;
 
 
-	public NeuralNetwork() {
+	public NeuralNetwork15() {
 		this(7, 5, 4);
 	}
 
 
-	public NeuralNetwork(int inputSize, int hiddenSize, int outputSize) {
+	public NeuralNetwork15(int inputSize, int hiddenSize, int outputSize) {
 		double[] pars = new double[inputSize];
 
 		for (int i = 0; i < pars.length; i++) {
@@ -26,7 +26,7 @@ public class NeuralNetwork {
 	}
 
 
-	public NeuralNetwork(int hiddenSize, int outputSize, double... pars) {
+	public NeuralNetwork15(int hiddenSize, int outputSize, double... pars) {
 		root = builtNetwork(pars, hiddenSize, outputSize);
 	}
 
@@ -77,7 +77,7 @@ public class NeuralNetwork {
 
 
 	public static void main(String[] args) {
-		new NeuralNetwork();
+		new NeuralNetwork15();
 	}
 
 

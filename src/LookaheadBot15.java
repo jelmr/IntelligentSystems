@@ -1,9 +1,7 @@
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.*;
 
 /** Another smarter kind of bot, which implements a minimax algorithm with look-ahead of two turns.
- * It simulates the opponent using the BullyBot strategy and simulates the possible outcomes for any
+ * It simulates the opponent using the BullyBot15 strategy and simulates the possible outcomes for any
  * choice of source and destination planets in the attack. The simulated outcome states are ranked by
  * the evaluation function, which returns the most promising one.
  * 
@@ -15,7 +13,7 @@ import java.util.*;
  * Is there a smart way to make this more efficient?
  */
 
-public class LookaheadBot extends Bot {
+public class LookaheadBot15 extends Bot15 {
 
 
 	
@@ -26,18 +24,18 @@ public class LookaheadBot extends Bot {
 	 * @param  pw
 	 * @return score of the final state of the simulation
 	 */
-	public static double evaluateState(LookaheadBot.SimulatedPlanetWars pw){
+	public static double evaluateState(LookaheadBot15.SimulatedPlanetWars pw){
 		
 		// CHANGE HERE
 		
 		double enemyShips = 1.0;
 		double myShips = 1.0;
 		
-		for (Planet planet: pw.EnemyPlanets()){
+		for (Planet15 planet: pw.EnemyPlanets()){
 			enemyShips += planet.NumShips();
 		}
 		
-		for (Planet planet: pw.MyPlanets()){
+		for (Planet15 planet: pw.MyPlanets()){
 			myShips += planet.NumShips();
 		}
 		
@@ -49,44 +47,44 @@ public class LookaheadBot extends Bot {
 	// don't change this
 	public static void main(String[] args) {
 		
-		Bot bot = new LookaheadBot();
-		Bot.execute(bot);
+		Bot15 bot = new LookaheadBot15();
+		Bot15.execute(bot);
 	}
 	
 	/**
-	 * Create the simulation environment. Returns a SimulatedPlanetWars instance.
+	 * Create the simulation environment. Returns a SimulatedPlanetWars15 instance.
 	 * Call every time you want a new simulation environment.
 
-	 * @return SimulatedPlanetWars instance on which to simulate your attacks. Create a new one everytime you want to try alternative simulations.
+	 * @return SimulatedPlanetWars15 instance on which to simulate your attacks. Create a new one everytime you want to try alternative simulations.
 	 */
-	public static LookaheadBot.SimulatedPlanetWars createSimulation(PlanetWars pw){
+	public static LookaheadBot15.SimulatedPlanetWars createSimulation(PlanetWars15 pw){
 		return dummyBot.new SimulatedPlanetWars(pw);
 	}
 	
 	
 	/**
-	 * Static LookaheadBot, used only to access SimulatedPlanetWars (DON'T CHANGE)
+	 * Static LookaheadBot15, used only to access SimulatedPlanetWars15 (DON'T CHANGE)
 	 */
-	static LookaheadBot dummyBot = new LookaheadBot();
+	static LookaheadBot15 dummyBot = new LookaheadBot15();
 
 
 	@Override
-	public Action getAction(PlanetWars pw) {
+	public Action15 getAction(PlanetWars15 pw) {
 		double score = Double.MIN_VALUE;
-		Planet source = null;
-		Planet dest = null;
+		Planet15 source = null;
+		Planet15 dest = null;
 
 
 		// We try to simulate each possible action and its outcome after two turns
 		// considering each of my planets as a possible source
 		// and each enemy planet as a possible destination
-		for (Planet myPlanet: pw.MyPlanets()){
+		for (Planet15 myPlanet: pw.MyPlanets()){
 
 			//avoid planets with only one ship
 			if (myPlanet.NumShips() <= 1)
 				continue;
 
-			for (Planet notMyPlanet: pw.NotMyPlanets()){
+			for (Planet15 notMyPlanet: pw.NotMyPlanets()){
 
 				// Create simulation environment - need to create one for each simulation
 				SimulatedPlanetWars simpw = createSimulation(pw);
@@ -96,7 +94,7 @@ public class LookaheadBot extends Bot {
 				// (2) simulate the growth of ships that happens in each turn
 				simpw.simulateGrowth();
 
-				// (3) simulate the opponent's turn, assuming that the opponent is the BullyBot
+				// (3) simulate the opponent's turn, assuming that the opponent is the BullyBot15
 				//     here you can add other opponents
 				simpw.simulateBullyBotAttack();
 				// (4) simulate the growth of ships that happens in each turn
@@ -119,40 +117,40 @@ public class LookaheadBot extends Bot {
 			}
 		}
 
-		return new Action(source, dest);
+		return new Action15(source, dest);
 	}
 
 
 	/**
-	 * Class which provide the simulation environment, has same interface as PlanetWars 
+	 * Class which provide the simulation environment, has same interface as PlanetWars15
 	 * (except for Fleets, that are not used).
 	 *
 	 */
 	public class SimulatedPlanetWars{
 
-		List<Planet> planets = new ArrayList<Planet>();
+		List<Planet15> planets = new ArrayList<Planet15>();
 		
-		public SimulatedPlanetWars(PlanetWars pw) {
+		public SimulatedPlanetWars(PlanetWars15 pw) {
 
-			for (Planet planet: pw.Planets()){
+			for (Planet15 planet: pw.Planets()){
 				planets.add(planet);
 			}
 		}
 		
 		public void simulateGrowth() {
-			for (Planet p: planets){
+			for (Planet15 p: planets){
 				
 				if(p.Owner() == 0)
 					continue;
 				
-				Planet newp = new Planet(p.PlanetID(), p.Owner(), p.NumShips()+p.GrowthRate() , 
+				Planet15 newp = new Planet15(p.PlanetID(), p.Owner(), p.NumShips()+p.GrowthRate() ,
 						p.GrowthRate(), p.X(), p.Y());
 				
 				planets.set(p.PlanetID(), newp);
 			}
 		}
 		
-		public void simulateAttack( int player, Planet source, Planet dest){
+		public void simulateAttack( int player, Planet15 source, Planet15 dest){
 			
 			if (source.Owner() != player){
 				return;
@@ -162,9 +160,9 @@ public class LookaheadBot extends Bot {
 			// Simulate attack
 			if (source != null && dest != null) {
 						
-				Planet newSource = new Planet(source.PlanetID(), source.Owner(), source.NumShips()/2 , 
+				Planet15 newSource = new Planet15(source.PlanetID(), source.Owner(), source.NumShips()/2 ,
 						source.GrowthRate(), source.X(), source.Y());
-				Planet newDest = new Planet(dest.PlanetID(), dest.Owner(), Math.abs(dest.NumShips()-source.NumShips()/2 ), 
+				Planet15 newDest = new Planet15(dest.PlanetID(), dest.Owner(), Math.abs(dest.NumShips()-source.NumShips()/2 ),
 						dest.GrowthRate(), dest.X(), dest.Y());
 				
 				if(dest.NumShips()< source.NumShips()/2){
@@ -179,21 +177,21 @@ public class LookaheadBot extends Bot {
 
 		}
 		
-		public void simulateAttack( Planet source, Planet dest){
+		public void simulateAttack( Planet15 source, Planet15 dest){
 			simulateAttack(1, source, dest);
 		}
 		
 		
 		public void simulateBullyBotAttack(){
-			Planet source = null;
-			Planet dest = null;
+			Planet15 source = null;
+			Planet15 dest = null;
 
 			
 			// (1) Apply your strategy
 			double sourceScore = Double.MIN_VALUE;
 			double destScore = Double.MAX_VALUE;
 			
-			for (Planet planet : planets) {
+			for (Planet15 planet : planets) {
 				if(planet.Owner() == 2) {// skip planets with only one ship
 					if (planet.NumShips() <= 1)
 						continue;
@@ -212,7 +210,7 @@ public class LookaheadBot extends Bot {
 				if(planet.Owner() != 2){
 					double scoreMin = (double) (planet.NumShips());
 					//if you want to debug how the score is computed, decomment the System.err.instructions
-		//			System.err.println("Planet: " +notMyPlanet.PlanetID()+ " Score: "+ score);
+		//			System.err.println("Planet15: " +notMyPlanet.PlanetID()+ " Score: "+ score);
 		//			System.err.flush();
 					if (scoreMin < destScore) {
 						//The way the score is defined, is that the weaker a planet is, the higher the score. 
@@ -231,7 +229,7 @@ public class LookaheadBot extends Bot {
 
 		}
 		
-		public List<Planet> Planets(){
+		public List<Planet15> Planets(){
 			return planets;
 		}
 		
@@ -242,15 +240,15 @@ public class LookaheadBot extends Bot {
 		
 	    // Returns the planet with the given planet_id. There are NumPlanets()
 	    // planets. They are numbered starting at 0.
-	    public Planet GetPlanet(int planetID) {
+	    public Planet15 GetPlanet(int planetID) {
 	    	return planets.get(planetID);
 	    }
 	    
 	    // Return a list of all the planets owned by the current player. By
 	    // convention, the current player is always player number 1.
-	    public List<Planet> MyPlanets() {
-			List<Planet> r = new ArrayList<Planet>();
-			for (Planet p : planets) {
+	    public List<Planet15> MyPlanets() {
+			List<Planet15> r = new ArrayList<Planet15>();
+			for (Planet15 p : planets) {
 			    if (p.Owner() == 1) {
 				r.add(p);
 			    }
@@ -259,9 +257,9 @@ public class LookaheadBot extends Bot {
 	    }
 	    
 	    // Return a list of all neutral planets.
-	    public List<Planet> NeutralPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	    public List<Planet15> NeutralPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 		    if (p.Owner() == 0) {
 			r.add(p);
 		    }
@@ -271,9 +269,9 @@ public class LookaheadBot extends Bot {
 
 	    // Return a list of all the planets owned by rival players. This excludes
 	    // planets owned by the current player, as well as neutral planets.
-	    public List<Planet> EnemyPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	    public List<Planet15> EnemyPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 		    if (p.Owner() >= 2) {
 			r.add(p);
 		    }
@@ -283,9 +281,9 @@ public class LookaheadBot extends Bot {
 
 	    // Return a list of all the planets that are not owned by the current
 	    // player. This includes all enemy planets and neutral planets.
-	    public List<Planet> NotMyPlanets() {
-		List<Planet> r = new ArrayList<Planet>();
-		for (Planet p : planets) {
+	    public List<Planet15> NotMyPlanets() {
+		List<Planet15> r = new ArrayList<Planet15>();
+		for (Planet15 p : planets) {
 		    if (p.Owner() != 1) {
 			r.add(p);
 		    }
@@ -297,8 +295,8 @@ public class LookaheadBot extends Bot {
 	    // integer. This is the number of discrete time steps it takes to get
 	    // between the two planets.
 		public int Distance(int sourcePlanet, int destinationPlanet) {
-			Planet source = planets.get(sourcePlanet);
-			Planet destination = planets.get(destinationPlanet);
+			Planet15 source = planets.get(sourcePlanet);
+			Planet15 destination = planets.get(destinationPlanet);
 			double dx = source.X() - destination.X();
 			double dy = source.Y() - destination.Y();
 			return (int) Math.ceil(Math.sqrt(dx * dx + dy * dy));
@@ -310,7 +308,7 @@ public class LookaheadBot extends Bot {
 	    // remaining players, then the game is a draw and 0 is returned.
 		public int Winner() {
 			Set<Integer> remainingPlayers = new TreeSet<Integer>();
-			for (Planet p : planets) {
+			for (Planet15 p : planets) {
 				remainingPlayers.add(p.Owner());
 			}
 			switch (remainingPlayers.size()) {
@@ -327,7 +325,7 @@ public class LookaheadBot extends Bot {
 	    // on planets or in flight.
 	    public int NumShips(int playerID) {
 		int numShips = 0;
-		for (Planet p : planets) {
+		for (Planet15 p : planets) {
 		    if (p.Owner() == playerID) {
 			numShips += p.NumShips();
 		    }
@@ -337,7 +335,7 @@ public class LookaheadBot extends Bot {
 
 	    
 
-	    public void IssueOrder(Planet source, Planet dest) {
+	    public void IssueOrder(Planet15 source, Planet15 dest) {
 	    	simulateAttack(source,dest);
 	    }
 	    

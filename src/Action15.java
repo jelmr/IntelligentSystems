@@ -6,12 +6,12 @@
  * @author Yoran Sturkenboom
  *         Date: 13/01/14
  */
-public class Action {
+public class Action15 {
 
-	Planet source, target;
+	Planet15 source, target;
 
 
-	public Action(Planet source, Planet target) {
+	public Action15(Planet15 source, Planet15 target) {
 		this.source = source;
 		this.target = target;
 	}
@@ -33,7 +33,7 @@ public class Action {
 	}
 
 
-	Action getAction() {
-		return new Action((Planet) source.clone(),(Planet) target.clone());
+	Action15 getAction() {
+		return new Action15((Planet15) source.clone(),(Planet15) target.clone());
 	}
 }

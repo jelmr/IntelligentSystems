@@ -10,10 +10,10 @@ import java.util.List;
  * Date: 11/01/2014
  */
 
-public abstract class Heuristic {
+public abstract class Heuristic15 {
 
 
-	public static Heuristic 	RANDOM = new Random(),
+	public static Heuristic15 RANDOM = new Random(),
 									FEWEST_SHIPS = new FewestShips(),
 									MOST_SHIPS = new MostShips(),
 									SMALLEST_GENERATION = new SmallestGeneration(),
@@ -21,7 +21,7 @@ public abstract class Heuristic {
 									BEST_GENERATION_PER_SHIPS_LOST = new BestGenerationPerShipsLost(),
 									TEST_HEURISTIC = new TestHeuristic();
 
-	public static Heuristic[] HEURISTICS = {FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST};
+	public static Heuristic15[] HEURISTICS = {FEWEST_SHIPS, MOST_SHIPS, SMALLEST_GENERATION, LARGEST_GENERATION, BEST_GENERATION_PER_SHIPS_LOST};
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
@@ -35,11 +35,11 @@ public abstract class Heuristic {
 	 * @param heuristic The heuristic to use to pick a planet.
 	 * @return The best planet from the list based on the supplied heuristic.
 	 */
-	public static Planet select(List<Planet> planets, Heuristic heuristic) {
-		Planet maxPlanet = null;
+	public static Planet15 select(List<Planet15> planets, Heuristic15 heuristic) {
+		Planet15 maxPlanet = null;
 		double maxScore = -Double.MAX_VALUE;
 
-		for (Planet planet : planets) {
+		for (Planet15 planet : planets) {
 			double score = heuristic.calculateScore(planet);
 			if (score > maxScore) {
 				maxPlanet = planet;
@@ -56,65 +56,65 @@ public abstract class Heuristic {
 	 * @param planet The planet for which to calculate a score.
 	 * @return A score. A higher score means it is favorable to take over this planet.
 	 */
-	abstract double calculateScore(Planet planet);
+	abstract double calculateScore(Planet15 planet);
 
 
 
-	static class Random extends Heuristic {
+	static class Random extends Heuristic15 {
 
 		// Better done by selecting a random number in the getPlanet() method...
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			return Math.random();
 		}
 	}
 
 
 
-	static class FewestShips extends Heuristic {
+	static class FewestShips extends Heuristic15 {
 
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			return 1. / planet.NumShips();
 		}
 	}
 
 
 
-	static class MostShips extends Heuristic {
+	static class MostShips extends Heuristic15 {
 
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			return planet.NumShips();
 		}
 	}
 
 
 
-	static class SmallestGeneration extends Heuristic {
+	static class SmallestGeneration extends Heuristic15 {
 
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			return 1. / planet.GrowthRate();
 		}
 	}
 
 
 
-	static class LargestGeneration extends Heuristic {
+	static class LargestGeneration extends Heuristic15 {
 
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			return planet.GrowthRate();
 		}
 	}
 
 
 
-	static class BestGenerationPerShipsLost extends Heuristic {
+	static class BestGenerationPerShipsLost extends Heuristic15 {
 
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			double baseScore = ((double) planet.GrowthRate()) / planet.NumShips();
 
 			if (planet.Owner() == NEUTRAL) {
@@ -126,10 +126,10 @@ public abstract class Heuristic {
 		}
 	}
 
-	static class TestHeuristic extends Heuristic {
+	static class TestHeuristic extends Heuristic15 {
 
 		@Override
-		public double calculateScore(Planet planet) {
+		public double calculateScore(Planet15 planet) {
 			double baseScore = ((double) planet.GrowthRate()) / planet.NumShips();
 
 			if (planet.Owner() == NEUTRAL) {

@@ -8,12 +8,12 @@
  */
 
 
-public class CustomBot extends Bot{
+public class CustomBot15 extends Bot15 {
 
-	public Action getAction(PlanetWars pw) {
+	public Action15 getAction(PlanetWars15 pw) {
 
 		String s ="\n\n";
-		for (Planet planet : pw.Planets()) {
+		for (Planet15 planet : pw.Planets()) {
 			s += planet.toString()+"\n";
 		}
 
@@ -21,17 +21,17 @@ public class CustomBot extends Bot{
 
 
 
-		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-		Planet target = Heuristic.select(pw.EnemyPlanets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+		Planet15 source = Heuristic15.select(pw.MyPlanets(), Heuristic15.MOST_SHIPS);
+		Planet15 target = Heuristic15.select(pw.EnemyPlanets(), Heuristic15.BEST_GENERATION_PER_SHIPS_LOST);
 //		logger.info(String.format("%s\n%s - %s", s, source, target));
-		return new Action(source, target);
+		return new Action15(source, target);
 	}
 
 
 
 	public static void main(String[] args) {
-		Bot bot = new CustomBot();
-		Bot.execute(bot);
+		Bot15 bot = new CustomBot15();
+		Bot15.execute(bot);
 	}
 
 

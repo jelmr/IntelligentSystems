@@ -7,7 +7,7 @@
  *         Date: 21/01/14
  */
 
-public abstract class DarwinBot extends Bot{
+public abstract class DarwinBot15 extends Bot15 {
 
 	/**
 	 * Generates a new instance of itself with the provided parameters.
@@ -15,7 +15,7 @@ public abstract class DarwinBot extends Bot{
 	 * @param pars Parameters to initialize itself with.
 	 * @return a new instance of itself with the provided parameters.
 	 */
-	public abstract DarwinBot getInstance(double... pars);
+	public abstract DarwinBot15 getInstance(double... pars);
 
 	/**
 	 * Replaces the parameters of this bot by the provided parameters.
@@ -31,6 +31,6 @@ public abstract class DarwinBot extends Bot{
 	 */
 	public abstract double[] getPars();
 
-	public abstract DarwinBot copy();
+	public abstract DarwinBot15 copy();
 
 }

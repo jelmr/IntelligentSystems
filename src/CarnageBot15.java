@@ -8,31 +8,31 @@
  */
 
 
-public class CarnageBot extends Bot{
+public class CarnageBot15 extends Bot15 {
 
-	public Action getAction(PlanetWars pw) {
+	public Action15 getAction(PlanetWars15 pw) {
 
 		String s ="";
-		for (Planet planet : pw.MyPlanets()) {
+		for (Planet15 planet : pw.MyPlanets()) {
 			s += planet.toString()+"\n";
 		}
 		s+="Enemy Planets";
-		for (Planet planet : pw.EnemyPlanets()) {
+		for (Planet15 planet : pw.EnemyPlanets()) {
 			s += planet.toString()+"\n";
 		}
 
-		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-		Planet target = Heuristic.select(pw.NotMyPlanets(), Heuristic.TEST_HEURISTIC);
+		Planet15 source = Heuristic15.select(pw.MyPlanets(), Heuristic15.MOST_SHIPS);
+		Planet15 target = Heuristic15.select(pw.NotMyPlanets(), Heuristic15.TEST_HEURISTIC);
 
 //		System.out.printf("\n\nMy Planets: "+s+"\n");
 //		logger.info("\n\nMy Planets: "+s+"\n");
-		return new Action(source, target);
+		return new Action15(source, target);
 	}
 
 
 	public static void main(String[] args) {
-		Bot bot = new CarnageBot();
-		Bot.execute(bot);
+		Bot15 bot = new CarnageBot15();
+		Bot15.execute(bot);
 	}
 
 

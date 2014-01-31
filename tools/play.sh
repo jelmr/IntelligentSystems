@@ -14,7 +14,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PLAYER1="ShikataGaNaiBot"
 PLAYER2="CompetitionBot"
 
-#javac -encoding ISO-8859-1 $PLAYER1.java $PLAYER2.java Bot.java SimulatedPlanetWars.java Heuristic.java PerformanceMeasure.java
+#javac -encoding ISO-8859-1 $PLAYER1.java $PLAYER2.java Bot.java SimulatedPlanetWars15.java Heuristic15.java PerformanceMeasure15.java
 
 echo "Player 1: "$PLAYER1 "(red)"
 echo "Player 2: "$PLAYER2 "(blue)"

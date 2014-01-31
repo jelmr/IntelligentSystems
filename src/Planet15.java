@@ -1,4 +1,4 @@
-public class Planet implements Cloneable {
+public class Planet15 implements Cloneable {
 
 	private int planetID;
 	private int owner;
@@ -8,12 +8,12 @@ public class Planet implements Cloneable {
 
 
 	// Initializes a planet.
-	public Planet(int planetID,
-				  int owner,
-				  int numShips,
-				  int growthRate,
-				  double x,
-				  double y) {
+	public Planet15(int planetID,
+					int owner,
+					int numShips,
+					int growthRate,
+					double x,
+					double y) {
 		this.planetID = planetID;
 		this.owner = owner;
 		this.numShips = numShips;
@@ -23,7 +23,7 @@ public class Planet implements Cloneable {
 	}
 
 
-	private Planet(Planet _p) {
+	private Planet15(Planet15 _p) {
 		planetID = _p.planetID;
 		owner = _p.owner;
 		numShips = _p.numShips;
@@ -89,13 +89,13 @@ public class Planet implements Cloneable {
 
 
 	public Object clone() {
-		return new Planet(this);
+		return new Planet15(this);
 	}
 
 
 	@Override
 	public String toString() {
-		return "Planet{" +
+		return "Planet15{" +
 				"ID=" + planetID +
 				"owner=" + owner +
 				", numShips=" + numShips +

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -13,25 +12,25 @@ import java.util.Comparator;
  */
 
 
-public class CompetitionBot extends Bot{
+public class CompetitionBot15 extends Bot15 {
 
 	private int turnsPlayed = 0;
-	public Action getAction(PlanetWars pw) {
+	public Action15 getAction(PlanetWars15 pw) {
 
 		int planetsCount = pw.Planets().size();
 		if (planetsCount == 8 || (planetsCount >= 18 && planetsCount <= 22)) {
-			return new CarnageBot().getAction(pw);
+			return new CarnageBot15().getAction(pw);
 		}
 
-		Planet source = Heuristic.select(pw.MyPlanets(), Heuristic.MOST_SHIPS);
-		ArrayList<Planet> myPlanets = new ArrayList<Planet>(pw.MyPlanets());
+		Planet15 source = Heuristic15.select(pw.MyPlanets(), Heuristic15.MOST_SHIPS);
+		ArrayList<Planet15> myPlanets = new ArrayList<Planet15>(pw.MyPlanets());
 
-		Planet target = null;
+		Planet15 target = null;
 		double maxScore = -Double.MAX_VALUE;
-		Planet maxEnemyPlanet = getLargestEnemyPlanet(pw);
+		Planet15 maxEnemyPlanet = getLargestEnemyPlanet(pw);
 
 		// Get largest enemy planet, accounts for enemy ships in transit.
-		for (Planet planet : pw.EnemyPlanets()) {
+		for (Planet15 planet : pw.EnemyPlanets()) {
 			int planetSize = planet.NumShips();
 			if (planet.PlanetID() == maxEnemyPlanet.PlanetID()) {
 				planetSize /= 2;
@@ -45,20 +44,20 @@ public class CompetitionBot extends Bot{
 		}
 
 		if (pw.NeutralPlanets().size() > 0) {
-			Planet maxNeutral = pw.NeutralPlanets().get(0);
+			Planet15 maxNeutral = pw.NeutralPlanets().get(0);
 			double maxGrowth = -Double.MAX_VALUE;
 
 
-			ArrayList<Planet> neutralPlanets = new ArrayList<Planet>(pw.NeutralPlanets());
-			Collections.sort(neutralPlanets, new Comparator<Planet>() {
+			ArrayList<Planet15> neutralPlanets = new ArrayList<Planet15>(pw.NeutralPlanets());
+			Collections.sort(neutralPlanets, new Comparator<Planet15>() {
 				@Override
-				public int compare(Planet a, Planet b) {
+				public int compare(Planet15 a, Planet15 b) {
 					return b.GrowthRate()-a.GrowthRate();
 				}
 			});
 
-			ArrayList<Planet> beneficialGrowth = new ArrayList<Planet>();
-			for (Planet planet : pw.NeutralPlanets()) {
+			ArrayList<Planet15> beneficialGrowth = new ArrayList<Planet15>();
+			for (Planet15 planet : pw.NeutralPlanets()) {
 				if (planet.GrowthRate() > maxGrowth) {
 					maxNeutral = planet;
 					maxGrowth = planet.GrowthRate();
@@ -83,26 +82,26 @@ public class CompetitionBot extends Bot{
 
 
 
-			for (Planet planet : beneficialGrowth) {
-				if (SimulatedPlanetWarsParallel.getDistance(source, planet) >= SimulatedPlanetWarsParallel.getDistance(maxEnemyPlanet, planet)) {
+			for (Planet15 planet : beneficialGrowth) {
+				if (SimulatedPlanetWarsParallel15.getDistance(source, planet) >= SimulatedPlanetWarsParallel15.getDistance(maxEnemyPlanet, planet)) {
 
-					return new Action(source, planet);
+					return new Action15(source, planet);
 				}
 			}
 
 		}
 
-		Planet ownBest = getBestGrowthFriendlyPlanet(pw);
+		Planet15 ownBest = getBestGrowthFriendlyPlanet(pw);
 		if (pw.MyPlanets().size() > 1 && ownBest.NumShips() < getLargestEnemyPlanet(pw).NumShips()/2) {
-			if (SimulatedPlanetWarsParallel.getDistance(source, ownBest) < SimulatedPlanetWarsParallel.getDistance(maxEnemyPlanet, ownBest)) {
+			if (SimulatedPlanetWarsParallel15.getDistance(source, ownBest) < SimulatedPlanetWarsParallel15.getDistance(maxEnemyPlanet, ownBest)) {
 				target = ownBest;
 			}
 		}
 
 
-		Collections.sort(myPlanets, new Comparator<Planet>() {
+		Collections.sort(myPlanets, new Comparator<Planet15>() {
 			@Override
-			public int compare(Planet a, Planet b) {
+			public int compare(Planet15 a, Planet15 b) {
 				return b.NumShips()-a.NumShips();
 			}
 		});
@@ -113,20 +112,20 @@ public class CompetitionBot extends Bot{
 
 
 
-		if(planetsCount < 6 && Heuristic.select(pw.Planets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST).Owner() == Bot.FRIENDLY) {
+		if(planetsCount < 6 && Heuristic15.select(pw.Planets(), Heuristic15.BEST_GENERATION_PER_SHIPS_LOST).Owner() == Bot15.FRIENDLY) {
 
-			//target = Heuristic.select(pw.Planets(), Heuristic.BEST_GENERATION_PER_SHIPS_LOST);
+			//target = Heuristic15.select(pw.Planets(), Heuristic15.BEST_GENERATION_PER_SHIPS_LOST);
 		}
 
 
 		turnsPlayed++;
-		return new Action(source, target);
+		return new Action15(source, target);
 	}
 
-	private Planet getLargestEnemyPlanet(PlanetWars pw) {
+	private Planet15 getLargestEnemyPlanet(PlanetWars15 pw) {
 		int maxShips = Integer.MIN_VALUE;
-		Planet result = null;
-		for (Planet planet : pw.EnemyPlanets()) {
+		Planet15 result = null;
+		for (Planet15 planet : pw.EnemyPlanets()) {
 			if (planet.NumShips() > maxShips) {
 				maxShips = planet.NumShips();
 				result = planet;
@@ -136,10 +135,10 @@ public class CompetitionBot extends Bot{
 
 	}
 
-	private Planet getBestGrowthFriendlyPlanet(PlanetWars pw) {
+	private Planet15 getBestGrowthFriendlyPlanet(PlanetWars15 pw) {
 		int maxShips = Integer.MIN_VALUE;
-		Planet result = null;
-		for (Planet planet : pw.MyPlanets()) {
+		Planet15 result = null;
+		for (Planet15 planet : pw.MyPlanets()) {
 			if (planet.GrowthRate() > maxShips) {
 				maxShips = planet.GrowthRate();
 				result = planet;
@@ -152,8 +151,8 @@ public class CompetitionBot extends Bot{
 
 
 	public static void main(String[] args) {
-		Bot bot = new CompetitionBot();
-		Bot.execute(bot);
+		Bot15 bot = new CompetitionBot15();
+		Bot15.execute(bot);
 	}
 
 

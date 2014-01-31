@@ -1,4 +1,4 @@
-Planet Wars Canvas Visualizer
+Planet15 Wars Canvas Visualizer
 =============================
 
 This is an HTML 5 Canvas based visualizer for the 2010 Google AI Challenge.

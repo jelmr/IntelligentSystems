@@ -2,7 +2,7 @@
 # a command that works on Linux/Mac
 # the arguments are passed in the same order as in the standard command
 # Usage: sim.sh <simulation_per_map> <player1> <player2> <max_turns> <max_turn_length>
-# E.g. sim.sh 5 CustomBot CustomBot 100 4000
+# E.g. sim.sh 5 CustomBot15 CustomBot15 100 4000
 
 SIMULATIONS=$1
 PLAYER1=$2

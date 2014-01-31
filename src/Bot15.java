@@ -15,7 +15,7 @@ import java.util.logging.SimpleFormatter;
  * Date: 11/01/2014
  */
 
-public abstract class Bot {
+public abstract class Bot15 {
 
 	public static final int NEUTRAL = 0,
 							FRIENDLY = 1,
@@ -29,24 +29,24 @@ public abstract class Bot {
 	 * Function for selecting the planet from which to send ships.
 	 *
 	 *
-	 * @param pw PlanetWars object from which to derive game state.
+	 * @param pw PlanetWars15 object from which to derive game state.
 	 * @return The planet from which to send ships.
 	 */
-	public abstract Action getAction(PlanetWars pw);
+	public abstract Action15 getAction(PlanetWars15 pw);
 
 
 	/**
-	 * Completes a turn. Falls back on CustomBot if the determined action is invalid..
+	 * Completes a turn. Falls back on CustomBot15 if the determined action is invalid..
 	 * @param pw Base state.
-	 * @param action Action to issue.
+	 * @param action Action15 to issue.
 	 */
-	private static void DoTurn(PlanetWars pw,Action action) {
+	private static void DoTurn(PlanetWars15 pw, Action15 action) {
 
 		if (action.isValid()){
 			pw.IssueOrder(action.source, action.target);
 		} else {
             System.err.println("Custombot");
-			//Action customAction = (new CustomBot()).getAction(pw);
+			//Action15 customAction = (new CustomBot15()).getAction(pw);
 			//pw.IssueOrder(customAction.source, customAction.target);
 		}
 
@@ -54,7 +54,7 @@ public abstract class Bot {
 
 
 
-	public static void execute(Bot bot) {
+	public static void execute(Bot15 bot) {
 		logger = getLogger(bot);
 		String line = "";
 		String message = "";
@@ -64,8 +64,8 @@ public abstract class Bot {
 				switch (c) {
 					case '\n':
 					if (line.equals("go")) {
-						PlanetWars pw = new PlanetWars(message);
-						Action action = null;
+						PlanetWars15 pw = new PlanetWars15(message);
+						Action15 action = null;
 						try {
 							action = bot.getAction(pw);
 						} catch (Exception e) {
@@ -106,7 +106,7 @@ public abstract class Bot {
 	 *
 	 * @return the logger.
 	 */
-	public static Logger getLogger(Bot bot){
+	public static Logger getLogger(Bot15 bot){
 
 		Logger logger = Logger.getLogger("MyLog");
 		FileHandler fh;

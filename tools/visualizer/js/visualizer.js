@@ -429,7 +429,7 @@ var ParserUtils = {
     $('.player2Name').html('<a href="profile.php?user_id=' + Visualizer.playerIds[1] + '">' + Visualizer.players[1] + '</a>')
     $('.player2Name a').css({'color': Visualizer.config.teamColor[2], 'text-decoration': 'none'})
     $('.playerVs').text('v.s.')
-    $('title').text(Visualizer.players[0] + ' v.s. ' + Visualizer.players[1] + ' - Planet Wars')
+    $('title').text(Visualizer.players[0] + ' v.s. ' + Visualizer.players[1] + ' - Planet15 Wars')
 
     Visualizer.start();
     Visualizer.drawChart();
